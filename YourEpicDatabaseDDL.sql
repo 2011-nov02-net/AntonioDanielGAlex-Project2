@@ -135,11 +135,12 @@ PRIMARY KEY (WriterID, SubscriberID);
 -- DROP TABLE [ProjTwo].[Role]
 CREATE TABLE [ProjTwo].[Role] (
     ID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    SubscriberID INT NOT NULL
+    Name NVARCHAR(40) NOT NULL
 );
 
 -- Get Entire Role Table 
 SELECT * FROM [ProjTwo].[Role];
+
 
 ----------------------------------------------------------------------------------------
 -- Create EpicCategory Table
@@ -158,7 +159,7 @@ ALTER TABLE [ProjTwo].[EpicCategory]
 ADD CONSTRAINT FK_EpicCategoryEpicID
 FOREIGN KEY (EpicID) REFERENCES [ProjTwo].[Epic](ID);
 
--- ALTER TABLE [ProjTwo].[EpicCategory] DROP CONSTRAINT FK_EpicCategoryCateogryID;
+-- ALTER TABLE [ProjTwo].[EpicCategory] DROP CONSTRAINT FK_EpicCategoryCategoryID;
 ALTER TABLE [ProjTwo].[EpicCategory]
 ADD CONSTRAINT FK_EpicCategoryCategoryID
 FOREIGN KEY (CategoryID) REFERENCES [ProjTwo].[Category](ID);
@@ -174,9 +175,10 @@ PRIMARY KEY (EpicID, CategoryID);
 -- Create Category Table
 -- DROP TABLE [ProjTwo].[Category]
 CREATE TABLE [ProjTwo].[Category] (
-    ID INT PRIMARY KEY NOT NULL,
+    ID INT PRIMARY KEY NOT NULL IDENTITY(1,1),
     Name VARCHAR(30) NOT NULL
 );
 
 -- Get Entire Category Table 
 SELECT * FROM [ProjTwo].[Category];
+
