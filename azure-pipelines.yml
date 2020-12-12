@@ -16,6 +16,7 @@ trigger:
 
 stages:
 - stage: build
+
   jobs:
   - job: build
     pool:
@@ -34,13 +35,19 @@ stages:
 
     - script: dotnet build --configuration $(buildConfiguration)
       displayName: dotnet build
-      workingDirectory: BookStore
-
+      workingDirectory: YourEpic
+    - task: DotNetCoreCLI@2
+      displayName: 'Run Tests'
+      inputs:
+        command: 'test'
+        arguments: '--configuration $(buildConfiguration)'
+        publishTestResults: true
+        workingDirectory: 'YourEpic'
     - script: dotnet publish --configuration $(buildConfiguration) --output publish
       displayName: dotnet publish
-      workingDirectory: BookStore
+      workingDirectory: YourEpic
     
-    - publish: BookStore/publish
+    - publish: YourEpic/publish
       artifact: app
 
 - stage: SonarCloud
@@ -62,14 +69,15 @@ stages:
           version: '2.x'
       - task: SonarCloudPrepare@1
         inputs:
-          SonarCloud: 'sonarcloud'
+          SonarCloud: 'SonarCloud'
           organization: '2011-nov02-net'
           scannerMode: 'MSBuild'
-          projectKey: '2011-nov02-net_antonio-project1'
+          projectKey: '2011-nov02-net_AntonioDanielGAlex-Project2'
+          projectName: 'YourEpic'
           extraProperties: |
-            'sonar.exclusions=**/lib/**'
-            sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)\**\*.trx
-            sonar.cs.vscoveragexml.reportsPaths=$(Agent.TempDirectory)\**\*.coveragexml
+            sonar.exclusions=**/lib/**
+            sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
+            sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
 
       - task: UseDotNet@2
         displayName: dotnet sdk $(sdkVersion)
@@ -79,21 +87,15 @@ stages:
 
       - script: dotnet build --configuration $(buildConfiguration)
         displayName: dotnet build
-        workingDirectory: BookStore
-
-      - task: UseDotNet@2
-        displayName: dotnet sdk $(sdkVersion)
-        inputs:
-          packageType: 'sdk'
-          version: '$(sdkVersion)'
+        workingDirectory: YourEpic
 
       - task: DotNetCoreCLI@2
         displayName: dotnet test
         inputs:
           command: 'test'
-          arguments: '--configuration $(buildConfiguration) --collect "Code Coverage"'
+          arguments: '--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --logger trx'
           publishTestResults: true
-          workingDirectory: 'BookStore'
+          workingDirectory: 'YourEpic'
           
       - task: SonarCloudAnalyze@1
         displayName: sonar analysis
@@ -119,7 +121,7 @@ stages:
             condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
             inputs:
               ConnectionType: 'AzureRM'
-              azureSubscription: 'Azure subscription 1 (e651ad7e-a3af-4e5b-9734-05a198120bd7)'
+              azureSubscription: 'Mendez Azure Subscription(e651ad7e-a3af-4e5b-9734-05a198120bd7)'
               appType: 'webApp'
-              WebAppName: 'mvc-mendez'
+              WebAppName: 'YourEpic'
               packageForLinux: '$(Pipeline.Workspace)/app'
