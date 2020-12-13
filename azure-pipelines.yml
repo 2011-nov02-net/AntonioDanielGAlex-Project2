@@ -1,0 +1,120 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - azure-pipelines.yml
+    - YourEpic
+
+stages:
+- stage: build
+
+  jobs:
+  - job: build
+    pool:
+      vmImage: 'ubuntu-latest'
+
+    variables:
+      buildConfiguration: 'Release'
+      sdkVersion: 5.0.x
+
+    steps:
+    - task: UseDotNet@2
+      displayName: dotnet sdk $(sdkVersion)
+      inputs:
+        packageType: 'sdk'
+        version: '$(sdkVersion)'
+
+    - script: dotnet build --configuration $(buildConfiguration)
+      displayName: dotnet build
+      workingDirectory: YourEpic
+    - task: DotNetCoreCLI@2
+      displayName: 'Run Tests'
+      inputs:
+        command: 'test'
+        arguments: '--configuration $(buildConfiguration)'
+        publishTestResults: true
+        workingDirectory: 'YourEpic'
+    - script: dotnet publish --configuration $(buildConfiguration) --output publish
+      displayName: dotnet publish
+      workingDirectory: YourEpic
+    
+    - publish: YourEpic/publish
+      artifact: app
+
+- stage: SonarCloud
+  dependsOn: []
+  jobs:
+    - job: testing
+      pool:
+        vmImage: 'ubuntu-latest'
+      variables:
+        buildConfiguration: 'Release'
+        sdkVersion: 5.0.x
+        
+      steps:
+        
+      - task: UseDotNet@2
+        displayName: dotnet sdk 2.x
+        inputs:
+          packageType: 'sdk'
+          version: '2.x'
+      - task: SonarCloudPrepare@1
+        inputs:
+          SonarCloud: 'SonarCloud'
+          organization: '2011-nov02-net'
+          scannerMode: 'MSBuild'
+          projectKey: '2011-nov02-net_AntonioDanielGAlex-Project2'
+          projectName: 'YourEpic'
+          extraProperties: |
+            sonar.exclusions=**/lib/**
+            sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
+            sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+
+      - task: UseDotNet@2
+        displayName: dotnet sdk $(sdkVersion)
+        inputs:
+          packageType: 'sdk'
+          version: '$(sdkVersion)'
+
+      - script: dotnet build --configuration $(buildConfiguration)
+        displayName: dotnet build
+        workingDirectory: YourEpic
+
+      - task: DotNetCoreCLI@2
+        displayName: dotnet test
+        inputs:
+          command: 'test'
+          arguments: '--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --logger trx'
+          publishTestResults: true
+          workingDirectory: 'YourEpic'
+          
+      - task: SonarCloudAnalyze@1
+        displayName: sonar analysis
+
+      - task: SonarCloudPublish@1
+        displayName: sonar analysis publish
+        inputs:
+          pollingTimeoutSec: '300'
+    
+- stage: release
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  jobs:
+   - deployment: app_service
+     environment: prod
+     strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: app
+            displayName: download app
+          - task: AzureRmWebAppDeployment@4
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Mendez Azure Subscription(e651ad7e-a3af-4e5b-9734-05a198120bd7)'
+              appType: 'webApp'
+              WebAppName: 'YourEpic'
+              packageForLinux: '$(Pipeline.Workspace)/app'
