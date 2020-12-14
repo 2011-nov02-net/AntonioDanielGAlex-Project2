@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace YourEpic.DB.IRepositories
 {
     public interface IReaderRepository
@@ -7,14 +9,14 @@ namespace YourEpic.DB.IRepositories
         /// Leave a rating on an epic
         /// </summary>
         /// <param name="rating"></param>
-        public void MakeRating(Domain.rating rating);
+        public bool MakeRating(Rating rating);
 
         /// <summary>
         /// Get all of the epics by publishers that a reader is subscribed to.
         /// </summary>
         /// <param name="subscriberID"></param>
         /// <returns></returns>
-        public IEnumerable<Domain.epic> GetEpicsSubscribedTo(int subscriberID);
+        public IEnumerable<Epic> GetEpicsSubscribedTo(int subscriberID);
 
 
         /// <summary>
@@ -22,7 +24,7 @@ namespace YourEpic.DB.IRepositories
         /// </summary>
         /// <param name="category"></param>
         /// <returns></returns>
-        public IEnumerable<Domain.Epic> SearchForEpicByCategory(string category);
+        public IEnumerable<Epic> SearchForEpicByCategory(string category);
 
 
         /// <summary>
@@ -31,6 +33,6 @@ namespace YourEpic.DB.IRepositories
         /// </summary>
         /// <param name="category"></param>
         /// <returns></returns>
-        public IEnumerable<Domain.Epic> SearchForEpicByTitle(string Title);
+        public IEnumerable<Epic> SearchForEpicByTitle(string Title);
     }
 }

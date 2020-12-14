@@ -6,15 +6,15 @@ namespace YourEpic.DB.IRepositories
         /// <summary>
         /// Subscribe to a Publisher 
         /// </summary>
-        /// <param name="publisherID"></param>
-        /// <param name="subscriberID"></param>
-        public void SubscribeToPublisher(int publisherID, int subscriberID);
+        /// <param name="publisher"></param>
+        /// <param name="subscriber"></param>
+        public bool SubscribeToPublisher(User subscriber, User publisher);
 
         /// <summary>
         /// Unsubscribe From a Publisher
         /// </summary>
-        /// <param name="publisherID"></param>
-        /// <param name="subscriberID"></param>
-        public void UnsubscribeFromPublisher(int publisherID, int subscriberID);
+        /// <param name="publisher"></param>
+        /// <param name="subscriber"></param>
+        public bool UnsubscribeFromPublisher(User subscriber, User publisher);
     }
 }

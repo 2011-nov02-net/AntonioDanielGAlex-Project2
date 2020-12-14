@@ -1,4 +1,6 @@
 ﻿using System;
+
+
 namespace YourEpic.DB.IRepositories
 {
     public interface IPublisherRepoistory
@@ -7,37 +9,39 @@ namespace YourEpic.DB.IRepositories
         /// Publisher creates a new epic
         /// </summary>
         /// <param name="epic"></param>
-        public void AddEpic(Domain.Epic epic);
+        public bool AddEpic(Domain.Models.Epic epic);
 
         /// <summary>
         /// Delete Epic By passing in EpicID
         /// </summary>
         /// <param name="epicID"></param>
-        public void DeleteEpic(int epicID);
+        public bool DeleteEpic(int epicID);
 
         /// <summary>
         /// Add a chapter to an epic
         /// </summary>
         /// <param name="chapter"></param>
-        public void AddChapter(Domain.Chapter chapter);
+        public bool AddChapter(Domain.Models.Chapter chapter);
 
         /// <summary>
         /// Delete Chapter by passing in ChapterID
         /// </summary>
         /// <param name="chapterID"></param>
-        public void DeleteChapter(int chapterID);
+        public bool DeleteChapter(int chapterID);
 
         /// <summary>
         /// Publisher wants to edit an existing chapter
         /// </summary>
         /// <param name="chapterID"></param>
-        public void EditChapter(int chapterID);
+        public bool EditChapter(int chapterID);
 
         /// <summary>
         /// Add categories to the epic (EpicCategory table)
         /// </summary>
         /// <param name="categoryID"></param>
         /// <param name="epicID"></param>
-        public void CategorizeEpic(int categoryID, int epicID);
+        public bool CategorizeEpic(int categoryID, int epicID);
+
+        public IEnumerable<Category>
     }
 }
