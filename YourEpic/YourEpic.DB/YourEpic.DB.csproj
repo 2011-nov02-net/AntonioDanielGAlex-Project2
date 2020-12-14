@@ -16,7 +16,4 @@
     <ProjectReference Include="..\YourEpic.Domain\YourEpic.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="IRepositories\" />
-  </ItemGroup>
 </Project>
