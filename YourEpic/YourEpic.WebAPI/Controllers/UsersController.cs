@@ -3,44 +3,74 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using YourEpic.Domain;
+using YourEpic.Domain.Interfaces;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace YourEpic.WebAPI.Controllers
 {
+    // api/Users
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
-        // GET: api/values
+        private readonly IAccountRepository _accountRepository;
+
+        public UsersController(IAccountRepository accountRepository)
+        {
+            _accountRepository = accountRepository;
+        }
+
+
+        // GET: api/users
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<User> Get()
         {
-            return new string[] { "value1", "value2" };
+
+            return _accountRepository.GetUsers();
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
-        // POST api/values
+        // POST: api/users
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post(User user)
         {
+
+            return Ok(user);
         }
 
-        // PUT api/values/5
+
+        // GET: api/users/5
+        [HttpGet("{id}")]
+        public User Get(int id)
+        {
+
+            return _accountRepository.GetUserByID(id);
+        }
+
+
+        // PUT: api/users/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(User user)
         {
+
+            _accountRepository.EditAccount(user);
+
+            return NoContent();
         }
 
-        // DELETE api/values/5
+
+        // DELETE: api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+
+            _accountRepository.DeleteAccount(id);
+
+            return NoContent();
         }
+
+
+
+
     }
 }
