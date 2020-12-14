@@ -8,11 +8,17 @@ namespace YourEpic.Domain.Interfaces
 
         public interface IEpicRepository
         {
-            public Epic GetEpicByID(int epicID);
+            Epic GetEpicByID(int epicID);
 
-            public IEnumerable<Epic> GetAllEpics();
+            IEnumerable<Epic> GetAllEpics();
 
-            public IEnumerable<Epic> GetPublishersEpics(int publisherID);
+            IEnumerable<Epic> GetPublishersEpics(int publisherID);
+
+            bool UpdateEpicTitle(Epic epic);
+
+            Epic GetHighestRatedEpic();
+
+            Epic GetFeaturedEpic();
         }
     }
 }
