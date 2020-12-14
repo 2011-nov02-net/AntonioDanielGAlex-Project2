@@ -1,6 +1,9 @@
 ﻿using System;
+<<<<<<< HEAD
 using System.Collections.Generic;
 
+=======
+>>>>>>> 5c4db1d56968819077b26dbf724e72ce7fcb55d4
 namespace YourEpic.DB.IRepositories
 {
     public interface IReaderRepository
@@ -9,14 +12,22 @@ namespace YourEpic.DB.IRepositories
         /// Leave a rating on an epic
         /// </summary>
         /// <param name="rating"></param>
+<<<<<<< HEAD
         public bool MakeRating(Rating rating);
+=======
+        public void MakeRating(Domain.rating rating);
+>>>>>>> 5c4db1d56968819077b26dbf724e72ce7fcb55d4
 
         /// <summary>
         /// Get all of the epics by publishers that a reader is subscribed to.
         /// </summary>
         /// <param name="subscriberID"></param>
         /// <returns></returns>
+<<<<<<< HEAD
         public IEnumerable<Epic> GetEpicsSubscribedTo(int subscriberID);
+=======
+        public IEnumerable<Domain.epic> GetEpicsSubscribedTo(int subscriberID);
+>>>>>>> 5c4db1d56968819077b26dbf724e72ce7fcb55d4
 
 
         /// <summary>
@@ -24,7 +35,11 @@ namespace YourEpic.DB.IRepositories
         /// </summary>
         /// <param name="category"></param>
         /// <returns></returns>
+<<<<<<< HEAD
         public IEnumerable<Epic> SearchForEpicByCategory(string category);
+=======
+        public IEnumerable<Domain.Epic> SearchForEpicByCategory(string category);
+>>>>>>> 5c4db1d56968819077b26dbf724e72ce7fcb55d4
 
 
         /// <summary>
@@ -33,6 +48,10 @@ namespace YourEpic.DB.IRepositories
         /// </summary>
         /// <param name="category"></param>
         /// <returns></returns>
+<<<<<<< HEAD
         public IEnumerable<Epic> SearchForEpicByTitle(string Title);
+=======
+        public IEnumerable<Domain.Epic> SearchForEpicByTitle(string Title);
+>>>>>>> 5c4db1d56968819077b26dbf724e72ce7fcb55d4
     }
 }
