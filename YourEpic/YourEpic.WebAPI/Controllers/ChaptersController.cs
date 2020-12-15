@@ -68,7 +68,7 @@ namespace YourEpic.WebAPI.Controllers
 
                 return NoContent();
             }
-            return NotFound()
+            return NotFound();
         }
     }
 }
