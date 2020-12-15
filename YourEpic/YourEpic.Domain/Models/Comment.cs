@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using YourEpic.Domain.Models;
 
 namespace YourEpic.Domain.Models
 {
@@ -33,7 +30,7 @@ namespace YourEpic.Domain.Models
         public int ID => _id;
         public User Commenter => _commenter;
         public Epic CommentEpic => _commentEpic;
-        public string CommentContent=> _commentContent;
+        public string CommentContent => _commentContent;
         public DateTime Date => _date;
     }
 }

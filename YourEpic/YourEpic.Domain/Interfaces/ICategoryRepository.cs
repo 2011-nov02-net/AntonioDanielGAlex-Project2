@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using YourEpic.Domain.Models;
 
 namespace YourEpic.Domain.Interfaces

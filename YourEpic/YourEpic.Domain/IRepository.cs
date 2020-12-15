@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace YourEpic.Domain
+﻿namespace YourEpic.Domain
 {
     public interface IRepository
     {

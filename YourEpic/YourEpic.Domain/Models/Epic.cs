@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using YourEpic.Domain.Models;
 using System.Linq;
 
 namespace YourEpic.Domain.Models
@@ -67,7 +65,7 @@ namespace YourEpic.Domain.Models
             {
                 comments = _comments.Where(c => c.Commenter.ID == id).ToList();
             }
-            catch(InvalidOperationException)
+            catch (InvalidOperationException)
             {
                 return null;
             }

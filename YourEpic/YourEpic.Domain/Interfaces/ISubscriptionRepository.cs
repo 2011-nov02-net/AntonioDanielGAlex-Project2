@@ -1,5 +1,4 @@
-﻿using System;
-using YourEpic.Domain.Models;
+﻿using YourEpic.Domain.Models;
 
 namespace YourEpic.Domain.Interfaces
 {

@@ -7,14 +7,13 @@ namespace YourEpic.Tests.Domain
 {
     public class EpicTests
     {
-        User user = new User(0, "Tester", "Test@test.com", "password", new Role(0, "Reader"), new List<Epic>());
-
-        Epic TestEpic = new Epic(0, "Epic Test",
+        readonly User user = new User(0, "Tester", "Test@test.com", "password", new Role(0, "Reader"), new List<Epic>());
+        readonly Epic TestEpic = new Epic(0, "Epic Test",
             new User(0, "Tester", "Test@test.com", "password",
                 new Role(0, "Reader"),
                 new List<Epic>()), DateTime.Now,
-            new List<Chapter>(), 
-            new List<Comment>(), 
+            new List<Chapter>(),
+            new List<Comment>(),
             new List<Rating>());
 
         [Fact]
@@ -47,7 +46,7 @@ namespace YourEpic.Tests.Domain
             TestEpic.Comments.Add(comment);
             TestEpic.Comments.Add(comment2);
 
-            Assert.True(TestEpic.GetCommentsByUserId(0).Count==1, "There should only exist 1 comment by user id 0");
+            Assert.True(TestEpic.GetCommentsByUserId(0).Count == 1, "There should only exist 1 comment by user id 0");
         }
 
         [Fact]

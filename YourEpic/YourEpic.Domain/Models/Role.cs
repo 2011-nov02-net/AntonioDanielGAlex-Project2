@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace YourEpic.Domain.Models
+﻿namespace YourEpic.Domain.Models
 {
     public class Role
     {
@@ -22,6 +18,6 @@ namespace YourEpic.Domain.Models
 
         public int ID => _id;
         public string Name => _name;
-        
+
     }
 }
