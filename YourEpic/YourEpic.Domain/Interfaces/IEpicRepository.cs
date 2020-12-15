@@ -17,5 +17,7 @@ namespace YourEpic.Domain.Interfaces
         Epic GetHighestRatedEpic();
 
         Epic GetFeaturedEpic();
+
+        Chapter GetChapter(int id);
     }
 }

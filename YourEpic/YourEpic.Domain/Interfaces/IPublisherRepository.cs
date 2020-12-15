@@ -14,5 +14,6 @@ namespace YourEpic.Domain.Interfaces
         bool DeleteChapter(Chapter chapter);
 
         bool EditChapter(Chapter chapter);
+
     }
 }
