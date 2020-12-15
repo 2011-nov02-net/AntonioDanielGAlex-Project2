@@ -12,7 +12,7 @@ X            DB should be on the cloud
             all DB/network access should be async
         server-side validation
         support filtering or pagination on at least one resource
-        logging
+X        logging
         implement hypermedia, or, implement an API Description Language, e.g. using Swashbuckle
         (optional: implement a custom filter, health check, or middleware, e.g. exception-handling middleware)
 X    Azure Pipelines
@@ -25,11 +25,11 @@ X            SonarCloud
     authentication and authorization with e.g. Auth0 or Okta
     (optional: calls an external API, or integrates with some other service)
     Scrum processes
-        Project board to track user stories across team. (no requirements on how detailed)
+X        Project board to track user stories across team. (no requirements on how detailed)
         Standup at least two or three times a week
     any other tech you want within reason
-    the data model (how many tables, what kind of complex relationship like N to N) must be at least as complicated as project 1.
-    the user interaction model (what are the user stories, what inputs/interactions can the user make) must be at least as complicated as project 1.
+X    the data model (how many tables, what kind of complex relationship like N to N) must be at least as complicated as project 1.
+X    the user interaction model (what are the user stories, what inputs/interactions can the user make) must be at least as complicated as project 1.
     a project proposal
         MVP minimum viable product
         potentially stretch goals, extra features

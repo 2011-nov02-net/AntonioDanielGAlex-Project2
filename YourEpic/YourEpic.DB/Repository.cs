@@ -1,9 +1,6 @@
 ﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Text;
-using YourEpic.Domain;
 using System.Linq;
+using YourEpic.Domain;
 
 namespace YourEpic.DB
 {

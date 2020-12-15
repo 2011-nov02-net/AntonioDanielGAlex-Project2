@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using YourEpic.Domain.Models;
 using System.Linq;
 
-namespace YourEpic.Domain
+namespace YourEpic.Domain.Models
 {
     public class User
     {
@@ -48,7 +46,7 @@ namespace YourEpic.Domain
             {
                 epic = _epics.FirstOrDefault(e => e.ID == id);
             }
-            catch(InvalidOperationException)
+            catch (InvalidOperationException)
             {
                 return null;
             }
