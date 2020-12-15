@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using YourEpic.Domain.Models;
 
 namespace YourEpic.Domain.Models
 {
