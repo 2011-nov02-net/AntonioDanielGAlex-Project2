@@ -1,4 +1,6 @@
 ﻿using System;
+using YourEpic.Domain.Models;
+
 namespace YourEpic.Domain.Interfaces
 {
     public interface ISubscriptionRepository

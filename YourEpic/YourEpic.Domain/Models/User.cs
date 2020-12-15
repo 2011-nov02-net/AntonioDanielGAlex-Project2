@@ -4,7 +4,7 @@ using System.Text;
 using YourEpic.Domain.Models;
 using System.Linq;
 
-namespace YourEpic.Domain
+namespace YourEpic.Domain.Models
 {
     public class User
     {
