@@ -39,9 +39,10 @@ stages:
       displayName: 'Run Tests'
       inputs:
         command: 'test'
-        arguments: '--configuration $(buildConfiguration)'
+        arguments: '--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --logger trx'
         publishTestResults: true
         workingDirectory: 'YourEpic'
+
     - script: dotnet publish --configuration $(buildConfiguration) --output publish
       displayName: dotnet publish
       workingDirectory: YourEpic
