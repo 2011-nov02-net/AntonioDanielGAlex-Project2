@@ -78,7 +78,15 @@ stages:
             sonar.exclusions=**/lib/**
             sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
             sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+      - task: UseDotNet@2
+        displayName: dotnet sdk $(sdkVersion)
+        inputs:
+          packageType: 'sdk'
+          version: '$(sdkVersion)'
 
+      - script: dotnet build --configuration $(buildConfiguration)
+        displayName: dotnet build
+        workingDirectory: YourEpic
       - task: UseDotNet@2
         displayName: dotnet sdk 3
         inputs:
