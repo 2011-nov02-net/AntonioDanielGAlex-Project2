@@ -16,8 +16,8 @@
             _name = name;
         }
 
-        public int ID => _id;
-        public string Name => _name;
+        public int ID { get; set; }
+        public string Name { get; set; }
 
     }
 }
