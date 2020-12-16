@@ -6,38 +6,13 @@ namespace YourEpic.Domain.Models
 {
     public class User
     {
-        private readonly int _id;
-        private readonly string _name;
-        private readonly string _email;
-        private readonly string _pasword;
-        private readonly Role _userRole;
-        private readonly List<Epic> _epics;
-
-        public User(int id, string name, string email, string password, Role role, List<Epic> epics)
-        {
-            _id = id;
-            _name = name;
-            _email = email;
-            _pasword = password;
-            _userRole = role;
-            _epics = epics;
-        }
-
-        public User(string name, string email, string password, Role role)
-        {
-            _name = name;
-            _email = email;
-            _pasword = password;
-            _userRole = role;
-        }
-
-        public int ID => _id;
-        public string Name => _name;
-        public string Email => _email;
-        public string Password => _pasword;
-        public Role UserRole => _userRole;
-        public List<Epic> Epics => _epics;
-        public int EpicCount => _epics.Count;
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public Role UserRole { get; set; }
+        public List<Epic> Epics { get; set; }
+        public int EpicCount { get; set; }
 
         public IEnumerable<Subscription> MySubscriptions { get; set; }
 
@@ -46,7 +21,7 @@ namespace YourEpic.Domain.Models
             Epic epic;
             try
             {
-                epic = _epics.FirstOrDefault(e => e.ID == id);
+                epic = Epics.FirstOrDefault(e => e.ID == id);
             }
             catch (InvalidOperationException)
             {
@@ -62,7 +37,7 @@ namespace YourEpic.Domain.Models
 
             try
             {
-                epic = _epics.FirstOrDefault(e => e.Title == name);
+                epic = Epics.FirstOrDefault(e => e.Title == name);
             }
             catch (InvalidOperationException)
             {
@@ -79,6 +54,21 @@ namespace YourEpic.Domain.Models
                 return;
             }
             MySubscriptions.ToList().Add(new Subscription { Publisher = user });
+        }
+
+        public Epic GetHighestRatedEpic()
+        {
+            Epic epic;
+            try
+            {
+                epic = Epics.Where(e => e.AverageRating == Epics.Max(e => e.AverageRating)).FirstOrDefault();
+            }
+            catch(InvalidOperationException)
+            {
+                return null;
+            }
+
+            return epic;
         }
     }
 }

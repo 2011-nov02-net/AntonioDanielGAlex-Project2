@@ -4,35 +4,11 @@ namespace YourEpic.Domain.Models
 {
     public class Chapter
     {
-        private readonly int _id;
-        private readonly string _title;
-        private readonly Epic _chapterEpic;
-        private readonly DateTime _date;
-        private readonly string _text;
-
-        public Chapter(int id, string title, Epic epic, DateTime date, string text)
-        {
-            _id = id;
-            _title = title;
-            _chapterEpic = epic;
-            _date = date;
-            _text = text;
-        }
-
-        public Chapter(string title, Epic epic, DateTime date, string text)
-        {
-            _title = title;
-            _chapterEpic = epic;
-            _date = date;
-            _text = text;
-        }
-
-        public int ID => _id;
-        public string Title => _title;
-        public Epic ChapterEpic => _chapterEpic;
-        public DateTime Date => _date;
-        public string Text => _text;
-
+        public int ID { get; set; }
+        public string Title { get; set; }
+        public Epic ChapterEpic { get; set; }
+        public DateTime Date { get; set; }
+        public string Text { get; set; }
 
     }
 }

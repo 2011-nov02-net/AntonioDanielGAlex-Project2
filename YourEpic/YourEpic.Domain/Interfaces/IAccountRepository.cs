@@ -5,7 +5,6 @@ namespace YourEpic.Domain.Interfaces
 {
     public interface IAccountRepository
     {
-
         bool CreateAccount(User user);
 
         bool DeleteAccount(int userID);
