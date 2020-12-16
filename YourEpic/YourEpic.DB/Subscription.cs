@@ -1,4 +1,7 @@
-﻿#nullable disable
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace YourEpic.DB
 {
@@ -6,6 +9,7 @@ namespace YourEpic.DB
     {
         public int WriterId { get; set; }
         public int SubscriberId { get; set; }
+        public bool? HasNewContent { get; set; }
 
         public virtual User Subscriber { get; set; }
         public virtual User Writer { get; set; }

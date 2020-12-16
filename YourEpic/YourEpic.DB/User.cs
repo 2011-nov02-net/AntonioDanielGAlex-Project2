@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 #nullable disable
 
@@ -19,7 +20,6 @@ namespace YourEpic.DB
         public string Name { get; set; }
         public int Role { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
 
         public virtual Role RoleNavigation { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }

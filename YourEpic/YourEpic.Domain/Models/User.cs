@@ -11,8 +11,10 @@ namespace YourEpic.Domain.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public Role UserRole { get; set; }
-        public List<Epic> Epics { get; set; }
+        public IEnumerable<Epic> Epics { get; set; }
         public int EpicCount { get; set; }
+
+        public IEnumerable<Subscription> MySubscriptions { get; set; }
 
         public Epic GetEpicById(int id)
         {
@@ -43,6 +45,15 @@ namespace YourEpic.Domain.Models
             }
 
             return epic;
+        }
+        
+        public void AddSubscription(User user) 
+        {
+            if (user.UserRole.Name != "Publisher") 
+            {
+                return;
+            }
+            MySubscriptions.ToList().Add(new Subscription { Publisher = user });
         }
 
         public Epic GetHighestRatedEpic()
