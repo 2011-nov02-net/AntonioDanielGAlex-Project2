@@ -39,9 +39,10 @@ stages:
       displayName: 'Run Tests'
       inputs:
         command: 'test'
-        arguments: '--configuration $(buildConfiguration)'
+        arguments: '--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --logger trx'
         publishTestResults: true
         workingDirectory: 'YourEpic'
+
     - script: dotnet publish --configuration $(buildConfiguration) --output publish
       displayName: dotnet publish
       workingDirectory: YourEpic
@@ -77,7 +78,15 @@ stages:
             sonar.exclusions=**/lib/**
             sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/**/coverage.opencover.xml
             sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+      - task: UseDotNet@2
+        displayName: dotnet sdk $(sdkVersion)
+        inputs:
+          packageType: 'sdk'
+          version: '$(sdkVersion)'
 
+      - script: dotnet build --configuration $(buildConfiguration)
+        displayName: dotnet build
+        workingDirectory: YourEpic
       - task: UseDotNet@2
         displayName: dotnet sdk 3
         inputs:
