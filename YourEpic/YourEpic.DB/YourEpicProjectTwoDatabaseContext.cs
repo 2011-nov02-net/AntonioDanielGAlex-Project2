@@ -206,7 +206,7 @@ namespace YourEpic.DB
             {
                 entity.ToTable("User", "ProjTwo");
 
-                entity.HasIndex(e => e.Email, "UQ__User__A9D10534467F9AD1")
+                entity.HasIndex(e => e.Email, "UQ__User__A9D10534CA9E0EA7")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -218,11 +218,6 @@ namespace YourEpic.DB
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(100);
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .HasColumnName("PASSWORD");
 
                 entity.HasOne(d => d.RoleNavigation)
                     .WithMany(p => p.Users)

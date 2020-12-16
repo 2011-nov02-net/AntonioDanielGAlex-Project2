@@ -1,4 +1,5 @@
-﻿using YourEpic.Domain.Models;
+﻿using System.Collections.Generic;
+using YourEpic.Domain.Models;
 
 namespace YourEpic.Domain.Interfaces
 {
@@ -7,5 +8,7 @@ namespace YourEpic.Domain.Interfaces
         bool SubscribeToPublisher(User subscriber, User publisher);
 
         bool UnsubscribeFromPublisher(User subscriber, User publisher);
+
+        IEnumerable<Subscription> GetMySubscriptions(int id);
     }
 }

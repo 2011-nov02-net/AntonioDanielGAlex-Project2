@@ -39,6 +39,8 @@ namespace YourEpic.Domain.Models
         public List<Epic> Epics => _epics;
         public int EpicCount => _epics.Count;
 
+        public IEnumerable<Subscription> MySubscriptions { get; set; }
+
         public Epic GetEpicById(int id)
         {
             Epic epic;
@@ -68,6 +70,15 @@ namespace YourEpic.Domain.Models
             }
 
             return epic;
+        }
+        
+        public void AddSubscription(User user) 
+        {
+            if (user.UserRole.Name != "Publisher") 
+            {
+                return;
+            }
+            MySubscriptions.ToList().Add(new Subscription { Publisher = user });
         }
     }
 }
