@@ -5,10 +5,10 @@ namespace YourEpic.Domain.Interfaces
 {
     public interface ISubscriptionRepository
     {
-        bool SubscribeToPublisher(User subscriber, User publisher);
+        bool SubscribeToPublisher(int subscriberID, int publisherID);
 
-        bool UnsubscribeFromPublisher(User subscriber, User publisher);
+        bool UnsubscribeFromPublisher(int subscriberID, int publisherID);
 
-        IEnumerable<Subscription> GetMySubscriptions(int id);
+        IEnumerable<Epic> GetMySubscriptions(int id);
     }
 }

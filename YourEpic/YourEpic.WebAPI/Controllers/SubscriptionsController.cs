@@ -26,29 +26,29 @@ namespace YourEpic.WebAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            if (_subscriptionRepository.GetMySubscriptions(id) is IEnumerable<Subscription> subscriptions)
+            if (_subscriptionRepository.GetMySubscriptions(id) is IEnumerable<Epic> subscriptions)
             {
                 return Ok(subscriptions);
             }
             return NotFound();
         }
 
-        // POST api/<SubscriptionsController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post(int subscriber, int publisherID)
         {
+            if (_subscriptionRepository.SubscribeToPublisher(subscriber, publisherID))
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
 
-        // PUT api/<SubscriptionsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Delete(int subscriber, int publisherID)
         {
-        }
-
-        // DELETE api/<SubscriptionsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            if (_subscriptionRepository.UnsubscribeFromPublisher(subscriber, publisherID))
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }
