@@ -15,13 +15,11 @@ namespace YourEpic.WebAPI.Controllers
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IEpicRepository _epicRepository;
-        private readonly IPublisherRepository _publisherRepository;
 
-        public UsersController(IAccountRepository accountRepository, IEpicRepository epicRepository, IPublisherRepository publisherRepository)
+        public UsersController(IAccountRepository accountRepository, IEpicRepository epicRepository)
         {
             _accountRepository = accountRepository;
             _epicRepository = epicRepository;
-            _publisherRepository = publisherRepository;
         }
 
 
@@ -29,7 +27,7 @@ namespace YourEpic.WebAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<User>> Get()
         {
-            if (_accountRepository.GetUsers().First() is User)
+            if (_accountRepository.GetUsers() is IEnumerable<User>)
             {
                 return _accountRepository.GetUsers().ToList();
             }
@@ -41,9 +39,11 @@ namespace YourEpic.WebAPI.Controllers
         [HttpPost]
         public IActionResult Post(User user)
         {
-            _accountRepository.CreateAccount(user);
-
-            return CreatedAtAction(nameof(Get), new { id = user.ID }, user);
+            if (_accountRepository.CreateAccount(user))
+            {
+                return CreatedAtAction(nameof(Get), new { id = user.ID }, user);
+            }
+            return BadRequest();
         }
 
 
@@ -93,7 +93,7 @@ namespace YourEpic.WebAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<Epic>> GetUserEpics(int id, User user)
         {
-            if (_epicRepository.GetPublishersEpics(user).First() is Epic)
+            if (_epicRepository.GetPublishersEpics(user) is IEnumerable<Epic>)
             {
                 return _epicRepository.GetPublishersEpics(user).ToList();
             }

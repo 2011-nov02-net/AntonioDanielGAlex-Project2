@@ -18,5 +18,7 @@ namespace YourEpic.Domain.Interfaces
         Epic GetFeaturedEpic();
 
         Chapter GetChapter(int id);
+
+        IEnumerable<Chapter> GetChapters(int epicID);
     }
 }

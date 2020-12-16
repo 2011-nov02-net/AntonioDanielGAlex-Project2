@@ -37,8 +37,11 @@ namespace YourEpic.WebAPI.Controllers
         [HttpPost]
         public IActionResult Post(Chapter chapter)
         {
-            _publisherRepository.AddChapter(chapter);
-            return CreatedAtAction(nameof(GetById), new { id = chapter.ID }, chapter);
+            if (_publisherRepository.AddChapter(chapter))
+            {
+                return CreatedAtAction(nameof(GetById), new { id = chapter.ID }, chapter);
+            }
+            return BadRequest();
         }
 
 
