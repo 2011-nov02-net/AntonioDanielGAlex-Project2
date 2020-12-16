@@ -17,7 +17,8 @@ SELECT * FROM [ProjTwo].[User];
 -- ALTER TABLE [ProjTwo].[User] DROP CONSTRAINT FK_UserRole;
 ALTER TABLE [ProjTwo].[User]
 ADD CONSTRAINT FK_UserRole
-FOREIGN KEY (Role) REFERENCES [ProjTwo].[Role](ID);
+FOREIGN KEY (Role) REFERENCES [ProjTwo].[Role](ID)
+ON DELETE CASCADE;
 ----------------------------------------------------------------------------------------
 -- Create Epic Table
 -- DROP TABLE [ProjTwo].[Epic]
@@ -34,7 +35,8 @@ CREATE TABLE [ProjTwo].[Epic](
 -- ALTER TABLE [ProjTwo].[Epic] DROP CONSTRAINT FK_EpicWriterID;
 ALTER TABLE [ProjTwo].[Epic]
 ADD CONSTRAINT FK_EpicWriterID
-FOREIGN KEY (WriterID) REFERENCES [ProjTwo].[User](ID);
+FOREIGN KEY (WriterID) REFERENCES [ProjTwo].[User](ID)
+ON DELETE CASCADE;
 
  --------------------------------------------------------------------------------------
 -- Create Chapter Table
@@ -53,7 +55,8 @@ CREATE TABLE [ProjTwo].[Chapter](
 -- ALTER TABLE [ProjTwo].[Chapter] DROP CONSTRAINT FK_ChapterEpicID;
 ALTER TABLE [ProjTwo].[Chapter]
 ADD CONSTRAINT FK_ChapterEpicID
-FOREIGN KEY (EpicID) REFERENCES [ProjTwo].[Epic](ID);
+FOREIGN KEY (EpicID) REFERENCES [ProjTwo].[Epic](ID)
+ON DELETE CASCADE;
 
 ----------------------------------------------------------------------------------------
 -- Create Rating Table
@@ -77,7 +80,8 @@ FOREIGN KEY (RaterID) REFERENCES [ProjTwo].[User](ID);
 -- ALTER TABLE [ProjTwo].[Rating] DROP CONSTRAINT FK_RatingEpicID;
 ALTER TABLE [ProjTwo].[Rating]
 ADD CONSTRAINT FK_RatingEpicID
-FOREIGN KEY (EpicID) REFERENCES [ProjTwo].[Epic](ID);
+FOREIGN KEY (EpicID) REFERENCES [ProjTwo].[Epic](ID)
+ON DELETE CASCADE;
 ----------------------------------------------------------------------------------------
 -- Create Comment Table
 -- DROP TABLE [ProjTwo].[Comment]
@@ -101,13 +105,15 @@ FOREIGN KEY (CommenterID) REFERENCES [ProjTwo].[User](ID);
 -- ALTER TABLE [ProjTwo].[Comment] DROP CONSTRAINT FK_CommentEpicID;
 ALTER TABLE [ProjTwo].[Comment]
 ADD CONSTRAINT FK_CommentEpicID
-FOREIGN KEY (EpicID) REFERENCES [ProjTwo].[Epic](ID);
+FOREIGN KEY (EpicID) REFERENCES [ProjTwo].[Epic](ID)
+ON DELETE CASCADE;
 ----------------------------------------------------------------------------------------
 -- Create Subscriptions Table
 -- DROP TABLE [ProjTwo].[Subscription]
 CREATE TABLE [ProjTwo].[Subscription] (
     WriterID INT NOT NULL,
-    SubscriberID INT NOT NULL
+    SubscriberID INT NOT NULL,
+	HasNewContent BIT default 0
 );
 
 -- Get Entire Rating Table 
@@ -122,7 +128,8 @@ FOREIGN KEY (WriterID) REFERENCES [ProjTwo].[User](ID);
 -- ALTER TABLE [ProjTwo].[Subscription] DROP CONSTRAINT FK_SubscriptionSubscriberID;
 ALTER TABLE [ProjTwo].[Subscription]
 ADD CONSTRAINT FK_SubscriptionSubscriberID
-FOREIGN KEY (SubscriberID) REFERENCES [ProjTwo].[User](ID);
+FOREIGN KEY (SubscriberID) REFERENCES [ProjTwo].[User](ID)
+ON DELETE CASCADE;
 
 -- <<<<<<<<>>>>>>>>>> Add Composite Primary Key <<<<<<<<>>>>>>>>>>  --
 -- ALTER TABLE [ProjTwo].[Subscription] DROP CONSTRAINT PK_WriterIDSubscriberID
@@ -157,12 +164,14 @@ SELECT * FROM [ProjTwo].[EpicCategory];
 -- ALTER TABLE [ProjTwo].[EpicCategory] DROP CONSTRAINT FK_EpicCategoryEpicID;
 ALTER TABLE [ProjTwo].[EpicCategory]
 ADD CONSTRAINT FK_EpicCategoryEpicID
-FOREIGN KEY (EpicID) REFERENCES [ProjTwo].[Epic](ID);
+FOREIGN KEY (EpicID) REFERENCES [ProjTwo].[Epic](ID)
+ON DELETE CASCADE;
 
 -- ALTER TABLE [ProjTwo].[EpicCategory] DROP CONSTRAINT FK_EpicCategoryCategoryID;
 ALTER TABLE [ProjTwo].[EpicCategory]
 ADD CONSTRAINT FK_EpicCategoryCategoryID
-FOREIGN KEY (CategoryID) REFERENCES [ProjTwo].[Category](ID);
+FOREIGN KEY (CategoryID) REFERENCES [ProjTwo].[Category](ID)
+ON DELETE CASCADE;
 
 -- <<<<<<<<>>>>>>>>>> Add Composite Primary Key <<<<<<<<>>>>>>>>>>  --
 -- ALTER TABLE [ProjTwo].[EpicCategory] DROP CONSTRAINT PK_EpicIDCategoryID
