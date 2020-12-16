@@ -5,7 +5,6 @@ namespace YourEpic.Domain.Interfaces
 {
     public interface IEpicRepository
     {
-
         Epic GetEpicByID(int id);
 
         IEnumerable<Epic> GetAllEpics();
