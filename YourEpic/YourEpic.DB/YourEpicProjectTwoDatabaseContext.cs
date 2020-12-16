@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
@@ -62,7 +64,6 @@ namespace YourEpic.DB
                 entity.HasOne(d => d.Epic)
                     .WithMany(p => p.Chapters)
                     .HasForeignKey(d => d.EpicId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ChapterEpicID");
             });
 
@@ -94,7 +95,6 @@ namespace YourEpic.DB
                 entity.HasOne(d => d.Epic)
                     .WithMany(p => p.Comments)
                     .HasForeignKey(d => d.EpicId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CommentEpicID");
             });
 
@@ -117,7 +117,6 @@ namespace YourEpic.DB
                 entity.HasOne(d => d.Writer)
                     .WithMany(p => p.Epics)
                     .HasForeignKey(d => d.WriterId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EpicWriterID");
             });
 
@@ -135,13 +134,11 @@ namespace YourEpic.DB
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.EpicCategories)
                     .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EpicCategoryCategoryID");
 
                 entity.HasOne(d => d.Epic)
                     .WithMany(p => p.EpicCategories)
                     .HasForeignKey(d => d.EpicId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EpicCategoryEpicID");
             });
 
@@ -160,7 +157,6 @@ namespace YourEpic.DB
                 entity.HasOne(d => d.Epic)
                     .WithMany(p => p.Ratings)
                     .HasForeignKey(d => d.EpicId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_RatingEpicID");
 
                 entity.HasOne(d => d.Rater)
@@ -192,10 +188,11 @@ namespace YourEpic.DB
 
                 entity.Property(e => e.SubscriberId).HasColumnName("SubscriberID");
 
+                entity.Property(e => e.HasNewContent).HasDefaultValueSql("((0))");
+
                 entity.HasOne(d => d.Subscriber)
                     .WithMany(p => p.SubscriptionSubscribers)
                     .HasForeignKey(d => d.SubscriberId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SubscriptionSubscriberID");
 
                 entity.HasOne(d => d.Writer)
@@ -209,7 +206,7 @@ namespace YourEpic.DB
             {
                 entity.ToTable("User", "ProjTwo");
 
-                entity.HasIndex(e => e.Email, "UQ__User__A9D1053423535E27")
+                entity.HasIndex(e => e.Email, "UQ__User__A9D10534467F9AD1")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -230,7 +227,6 @@ namespace YourEpic.DB
                 entity.HasOne(d => d.RoleNavigation)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.Role)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_UserRole");
             });
 
