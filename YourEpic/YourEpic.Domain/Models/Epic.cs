@@ -6,53 +6,28 @@ namespace YourEpic.Domain.Models
 {
     public class Epic
     {
-        private readonly int _id;
-        private readonly string _title;
-        private readonly User _writer;
-        private readonly DateTime _date;
-        private readonly List<Chapter> _chapters;
-        private readonly List<Comment> _comments;
-        private readonly List<Rating> _ratings;
-
-        public Epic(int id, string title, User user, DateTime date, List<Chapter> chapters, List<Comment> comments, List<Rating> ratings)
-        {
-            _id = id;
-            _title = title;
-            _writer = user;
-            _date = date;
-            _chapters = chapters;
-            _comments = comments;
-            _ratings = ratings;
-        }
-
-        public Epic(string title, User user, DateTime date)
-        {
-            _title = title;
-            _writer = user;
-            _date = date;
-        }
-
-        public int ID => _id;
-        public string Title => _title;
-        public User Writer => _writer;
-        public DateTime Date => _date;
-        public List<Chapter> Chapters => _chapters;
-        public List<Comment> Comments => _comments;
-        public List<Rating> Ratings => _ratings;
-        public int ChapterCount => _chapters.Count;
-        public int CommentCount => _comments.Count;
-        public int RatingCount => _ratings.Count;
+        public int ID { get; set; }
+        public string Title { get; set; }
+        public User Writer { get; set; }
+        public DateTime Date { get; set; }
+        public List<Chapter> Chapters { get; set; }
+        public List<Comment> Comments { get; set; }
+        public List<Rating> Ratings { get; set; }
+        public int ChapterCount { get; set; }
+        public int CommentCount { get; set; }
+        public int RatingCount { get; set; }
+        public double AverageRating => Ratings.Average(r => r.RatingNumber);
 
         public Chapter GetChapterById(int id)
         {
-            Chapter chapter = _chapters.FirstOrDefault(c => c.ID == id);
+            Chapter chapter = Chapters.FirstOrDefault(c => c.ID == id);
 
             return chapter;
         }
 
         public Chapter GetChapterByTitle(string title)
         {
-            Chapter chapter = _chapters.FirstOrDefault(c => c.Title == title);
+            Chapter chapter = Chapters.FirstOrDefault(c => c.Title == title);
 
             return chapter;
         }
@@ -63,7 +38,7 @@ namespace YourEpic.Domain.Models
 
             try
             {
-                comments = _comments.Where(c => c.Commenter.ID == id).ToList();
+                comments = Comments.Where(c => c.Commenter.ID == id).ToList();
             }
             catch (InvalidOperationException)
             {
@@ -79,7 +54,7 @@ namespace YourEpic.Domain.Models
 
             try
             {
-                rating = _ratings.FirstOrDefault(r => r.Rater.ID == id);
+                rating = Ratings.FirstOrDefault(r => r.Rater.ID == id);
             }
             catch (InvalidOperationException)
             {
