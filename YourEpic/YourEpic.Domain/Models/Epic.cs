@@ -10,9 +10,9 @@ namespace YourEpic.Domain.Models
         public string Title { get; set; }
         public User Writer { get; set; }
         public DateTime Date { get; set; }
-        public List<Chapter> Chapters { get; set; }
-        public List<Comment> Comments { get; set; }
-        public List<Rating> Ratings { get; set; }
+        public IEnumerable<Chapter> Chapters { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
+        public IEnumerable<Rating> Ratings { get; set; }
         public int ChapterCount { get; set; }
         public int CommentCount { get; set; }
         public int RatingCount { get; set; }

@@ -11,7 +11,7 @@ namespace YourEpic.Domain.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public Role UserRole { get; set; }
-        public List<Epic> Epics { get; set; }
+        public IEnumerable<Epic> Epics { get; set; }
         public int EpicCount { get; set; }
 
         public IEnumerable<Subscription> MySubscriptions { get; set; }

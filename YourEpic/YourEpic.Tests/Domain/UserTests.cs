@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 using YourEpic.Domain.Models;
 
@@ -7,24 +8,23 @@ namespace YourEpic.Tests.Domain
 {
     public class UserTests
     {
-        readonly User user = new User(0, "Tester", "Test@test.com", "password", new Role(0, "Publisher"), new List<Epic>());
+        readonly User user = new User
+        {
+            ID = 0,
+            Name = "Tester",
+            Epics = new[] { new Epic { ID = 0, Title = "Test Title", Date = DateTime.UtcNow } }
+        };
 
         [Fact]
         public void GetUsersEpicByID()
         {
-            Epic testEpic = new Epic(0, "Test Title", user, DateTime.UtcNow, new List<Chapter>(), new List<Comment>(), new List<Rating>());
-            user.Epics.Add(testEpic);
-
-            Assert.True(user.GetEpicById(0) == testEpic, $"The test epic should have an id of {testEpic.ID}");
+            Assert.True(user.GetEpicById(0).Title == "Test Title", $"The test epic should have an id of 0");
         }
 
         [Fact]
         public void GetUsersEpicByTitle()
         {
-            Epic testEpic = new Epic(0, "Test Title", user, DateTime.UtcNow, new List<Chapter>(), new List<Comment>(), new List<Rating>());
-            user.Epics.Add(testEpic);
-
-            Assert.True(user.GetEpicByTitle("Test Title") == testEpic, $"The test epic should have a title of {testEpic.Title}");
+            Assert.True(user.GetEpicByTitle("Test Title").ID == 0, $"The test epic should have a title of [Test Title]");
         }
     }
 }
