@@ -12,6 +12,7 @@ namespace YourEpic.DB
         public int EpicId { get; set; }
         public string Comment1 { get; set; }
         public DateTime? DateCreated { get; set; }
+        public int? ReplyToComment { get; set; }
 
         public virtual User Commenter { get; set; }
         public virtual Epic Epic { get; set; }

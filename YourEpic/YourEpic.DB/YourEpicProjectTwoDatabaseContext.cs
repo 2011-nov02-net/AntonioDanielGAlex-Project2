@@ -104,6 +104,10 @@ namespace YourEpic.DB
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.Concept).HasMaxLength(300);
+
+                entity.Property(e => e.DateCompleted).HasColumnType("datetime");
+
                 entity.Property(e => e.DateCreated)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");

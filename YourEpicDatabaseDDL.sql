@@ -12,7 +12,7 @@ CREATE TABLE [ProjTwo].[User] (
 -- Get entire User Table
 SELECT * FROM [ProjTwo].[User];
 
---|--------------------- Add Foreign Key(s) ----------------------------|--
+--|--------------------- Add Foreign Key(s) ----------------------------|-
 -- ALTER TABLE [ProjTwo].[User] DROP CONSTRAINT FK_UserRole;
 ALTER TABLE [ProjTwo].[User]
 ADD CONSTRAINT FK_UserRole
