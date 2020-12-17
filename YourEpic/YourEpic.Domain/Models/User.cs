@@ -12,7 +12,7 @@ namespace YourEpic.Domain.Models
         public string Password { get; set; }
         public Role UserRole { get; set; }
         public IEnumerable<Epic> Epics { get; set; }
-        public int EpicCount { get; set; }
+        public int EpicCount => Epics.Count();
 
         public IEnumerable<Subscription> MySubscriptions { get; set; }
 
