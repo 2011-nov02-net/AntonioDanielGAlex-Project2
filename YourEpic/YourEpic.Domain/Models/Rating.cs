@@ -5,6 +5,6 @@
         public int ID { get; set; }
         public User Rater { get; set; }
         public Epic RatingEpic { get; set; }
-        public double RatingNumber { get; set; }
+        public int RatingNumber { get; set; }
     }
 }

@@ -24,6 +24,9 @@ namespace YourEpic.DB.Repositories
 
         public bool MakeRating(Domain.Models.Rating rating)
         {
+            _context.Ratings.Add(new Rating { RaterId = rating.Rater.ID, EpicId = rating.RatingEpic.ID, Rating1 = rating.RatingNumber });
+            _context.SaveChanges();
+
 
             throw new NotImplementedException();
         }
