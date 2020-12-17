@@ -11,7 +11,8 @@ namespace YourEpic.WebAPI.Controllers
 {
     // api/Users
     [Route("api/[controller]")]
-    public class UsersController : Controller
+    [ApiController]
+    public class UsersController : ControllerBase
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IEpicRepository _epicRepository;
@@ -29,7 +30,8 @@ namespace YourEpic.WebAPI.Controllers
         {
             if (_accountRepository.GetUsers() is IEnumerable<User>)
             {
-                return _accountRepository.GetUsers().ToList();
+                IEnumerable<User> users = _accountRepository.GetUsers();
+                return Ok(users);
             }
             return NotFound();
         }
@@ -53,7 +55,7 @@ namespace YourEpic.WebAPI.Controllers
         {
             if (_accountRepository.GetUserByID(id) is User user)
             {
-                return user;
+                return Ok(user);
             }
 
             return NotFound();
@@ -90,12 +92,12 @@ namespace YourEpic.WebAPI.Controllers
 
         // Need to pass in the user id for the route, and the user to call the function
         // GET: api/users/{id}/epics
-        [HttpGet("{id}")]
+        [HttpGet("{id}/epics")]
         public ActionResult<IEnumerable<Epic>> GetUserEpics(int id, User user)
         {
             if (_epicRepository.GetPublishersEpics(user) is IEnumerable<Epic>)
             {
-                return _epicRepository.GetPublishersEpics(user).ToList();
+                return Ok(_epicRepository.GetPublishersEpics(user).ToList());
             }
 
 
