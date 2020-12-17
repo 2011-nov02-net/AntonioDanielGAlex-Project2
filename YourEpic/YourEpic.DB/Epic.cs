@@ -19,6 +19,8 @@ namespace YourEpic.DB
         public string Name { get; set; }
         public int WriterId { get; set; }
         public DateTime? DateCreated { get; set; }
+        public DateTime? DateCompleted { get; set; }
+        public string Concept { get; set; }
 
         public virtual User Writer { get; set; }
         public virtual ICollection<Chapter> Chapters { get; set; }
