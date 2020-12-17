@@ -17,6 +17,11 @@ namespace YourEpic.DB.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        /// <summary>
+        /// Adds Comment to epic
+        /// </summary>
+        /// <param name="comment">Domain Model Object</param>
+        /// <returns>True if comment successfully added to epic in database</returns>
         public bool AddComment(Domain.Models.Comment comment)
         {
             var dbComment = new Comment
@@ -33,6 +38,12 @@ namespace YourEpic.DB.Repositories
 
             return true;
         }
+
+        /// <summary>
+        /// Deletes Comment from database
+        /// </summary>
+        /// <param name="commentID">Comment id of comment to delete</param>
+        /// <returns>True if comment successfully deleted or false if comment non existent in database</returns>
         public bool DeleteComment(int commentID) { 
             var dbComment = _context.Comments
                 .FirstOrDefault(c => c.Id == commentID);
@@ -48,6 +59,11 @@ namespace YourEpic.DB.Repositories
             return true;
         }
 
+        /// <summary>
+        /// Gets all comments of an epic by id
+        /// </summary>
+        /// <param name="epicID">Target epic id</param>
+        /// <returns>All comments of an epic or empty list if epic has no comments yet</returns>
         public IEnumerable<Domain.Models.Comment> GetComments(int epicID)
         {
             var dbComments = _context.Comments
