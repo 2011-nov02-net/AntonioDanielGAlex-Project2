@@ -36,9 +36,9 @@ namespace YourEpic.WebAPI
             });
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-            //services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<IEpicRepository, EpicRepository>();
-            //services.AddScoped<IPublisherRepository, PublisherRepository>();
+            services.AddScoped<IPublisherRepository, PublisherRepository>();
             services.AddScoped<IRatingRepository, RatingRepository>();
             services.AddScoped<IReaderRepository, ReaderRepository>();
             services.AddScoped<IRolesRepository, RolesRepository>();
