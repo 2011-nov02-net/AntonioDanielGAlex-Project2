@@ -31,7 +31,6 @@ namespace YourEpic.WebAPI
             });
             services.AddDbContext<YourEpicProjectTwoDatabaseContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("YourEpic")));
-            services.AddScoped<IRepository, Repository>();
 
         }
 

@@ -13,6 +13,7 @@ namespace YourEpic.Domain.Models
         public IEnumerable<Chapter> Chapters { get; set; }
         public IEnumerable<Comment> Comments { get; set; }
         public IEnumerable<Rating> Ratings { get; set; }
+        public IEnumerable<Category> Categories { get; set; }
         public int ChapterCount { get; set; }
         public int CommentCount { get; set; }
         public int RatingCount { get; set; }
