@@ -5,6 +5,7 @@ namespace YourEpic.Domain.Interfaces
 {
     public interface ISubscriptionRepository
     {
+
         bool SubscribeToPublisher(int subscriberID, int publisherID);
 
         bool UnsubscribeFromPublisher(int subscriberID, int publisherID);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using YourEpic.Domain.Interfaces;
 
 namespace YourEpic.DB.Repositories
@@ -13,6 +14,10 @@ namespace YourEpic.DB.Repositories
             _context = context;
         }
 
+        public IEnumerable<Domain.Models.Epic> GetMySubscriptions(int id)
+        {
+            throw new NotImplementedException();
+        }
 
         public bool SubscribeToPublisher(int subscriberID, int publisherID)
         {
@@ -28,7 +33,7 @@ namespace YourEpic.DB.Repositories
         public bool UnsubscribeFromPublisher(int subscriberID, int publisherID)
         {
             var deleteSubscription = _context.Subscriptions.Find(publisherID, subscriberID);
-
+            
             _context.Subscriptions.Remove(deleteSubscription);
 
             return true;
