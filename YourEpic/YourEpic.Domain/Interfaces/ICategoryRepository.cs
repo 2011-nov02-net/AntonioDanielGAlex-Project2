@@ -9,6 +9,6 @@ namespace YourEpic.Domain.Interfaces
 
         IEnumerable<Category> GetCategories();
 
-        void AddCategory(string name);
+        bool AddCategory(string name);
     }
 }
