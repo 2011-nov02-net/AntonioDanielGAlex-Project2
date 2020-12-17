@@ -51,8 +51,7 @@ namespace YourEpic.DB.Repositories
 
         public Domain.Models.Epic GetFeaturedEpic()
         {
-            throw new NotImplementedException();
-            //return _context.Epics.OrderByDescending(e => e.DateCompleted).First();
+            return Mappers.EpicMapper.MapWithWriter(_context.Epics.Include(w=>w.Writer).OrderByDescending(e => e.DateCompleted).First());
         }
 
         public Domain.Models.Epic GetHighestRatedEpic()

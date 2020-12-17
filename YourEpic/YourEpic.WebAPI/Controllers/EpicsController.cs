@@ -11,7 +11,8 @@ using YourEpic.Domain.Models;
 namespace YourEpic.WebAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class EpicsController : Controller
+    [ApiController]
+    public class EpicsController : ControllerBase
     {
         private readonly IEpicRepository _epicRepository;
         private readonly IPublisherRepository _publisherRepository;
@@ -31,7 +32,7 @@ namespace YourEpic.WebAPI.Controllers
         {
             if (_epicRepository.GetAllEpics() is IEnumerable<Epic>)
             {
-                return _epicRepository.GetAllEpics().ToList();
+                return Ok(_epicRepository.GetAllEpics().ToList());
             }
             return NotFound();
 
@@ -44,7 +45,7 @@ namespace YourEpic.WebAPI.Controllers
         {
             if (_epicRepository.GetEpicByID(id) is Epic epic)
             {
-                return epic;
+                return Ok(epic);
             }
 
             return NotFound();
@@ -64,12 +65,12 @@ namespace YourEpic.WebAPI.Controllers
 
         // Here id is the epicID you want to look at/read
         // GET api/epic/{id}/chapters
-        [HttpGet("{id}")]
+        [HttpGet("{id}/chapters")]
         public ActionResult<IEnumerable<Chapter>> GetChapters(int id)
         {
             if (_epicRepository.GetChapters(id) is IEnumerable<Chapter> chapters)
             {
-                return chapters.ToList();
+                return Ok(chapters.ToList());
             }
 
             return NotFound();
@@ -89,7 +90,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // Should pass in the epicID for the path and the rating for the method.
         // POST: /api/epic/{epicID}/ratings
-        [HttpPost]
+        [HttpPost("{epicID}/ratings")]
         public IActionResult PostRating(int epicID, Rating rating)
         {
             if (_readerRepository.MakeRating(rating))
