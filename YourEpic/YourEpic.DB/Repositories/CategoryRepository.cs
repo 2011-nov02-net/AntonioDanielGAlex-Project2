@@ -16,7 +16,8 @@ namespace YourEpic.DB.Repositories
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-
+        
+       
         /// <summary>
         /// categorizes epics
         /// </summary>
@@ -31,6 +32,9 @@ namespace YourEpic.DB.Repositories
             {
                 return false;
             }
+
+
+    
 
             dbEpicCatergory = new EpicCategory
             {
@@ -53,7 +57,7 @@ namespace YourEpic.DB.Repositories
         {
             var dbCategories = _context.Categories.ToList();
 
-            if(dbCategories.Any())
+            if (dbCategories.Any())
             {
                 return new List<Domain.Models.Category>();
             }
@@ -67,7 +71,6 @@ namespace YourEpic.DB.Repositories
             return categories;
         }
 
-
         /// <summary>
         /// Add new category to database
         /// </summary>
@@ -75,8 +78,8 @@ namespace YourEpic.DB.Repositories
         public void AddCategory(string name)
         {
             var dbCategory = _context.Categories.FirstOrDefault(c => c.Name == name);
-            
-            if(dbCategory == null)
+
+            if (dbCategory == null)
             {
                 dbCategory = new Category
                 {
@@ -87,5 +90,7 @@ namespace YourEpic.DB.Repositories
                 _context.SaveChanges();
             }
         }
+
+
     }
 }

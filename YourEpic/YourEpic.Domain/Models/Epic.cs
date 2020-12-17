@@ -13,9 +13,10 @@ namespace YourEpic.Domain.Models
         public IEnumerable<Chapter> Chapters { get; set; }
         public IEnumerable<Comment> Comments { get; set; }
         public IEnumerable<Rating> Ratings { get; set; }
-        public int ChapterCount => Chapters.Count();
-        public int CommentCount => Comments.Count();
-        public int RatingCount => Ratings.Count();
+        public IEnumerable<Category> Categories { get; set; }
+        public int ChapterCount { get; set; }
+        public int CommentCount { get; set; }
+        public int RatingCount { get; set; }
         public double AverageRating => Ratings.Average(r => r.RatingNumber);
 
         public Chapter GetChapterById(int id)

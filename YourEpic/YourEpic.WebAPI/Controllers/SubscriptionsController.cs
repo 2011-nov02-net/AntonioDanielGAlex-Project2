@@ -35,6 +35,8 @@ namespace YourEpic.WebAPI.Controllers
             return NotFound();
         }
 
+        [HttpPost("{publisherID}/subscribee/{subscriber}")]
+
         public IActionResult Post(int subscriber, int publisherID)
         {
             if (_subscriptionRepository.SubscribeToPublisher(subscriber, publisherID))
@@ -44,6 +46,7 @@ namespace YourEpic.WebAPI.Controllers
             return BadRequest();
         }
 
+        [HttpDelete("{publisherID}/subscribee/{subscriber}")]
         public IActionResult Delete(int subscriber, int publisherID)
         {
             if (_subscriptionRepository.UnsubscribeFromPublisher(subscriber, publisherID))

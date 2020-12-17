@@ -11,7 +11,8 @@ using YourEpic.Domain.Models;
 namespace YourEpic.WebAPI.Controllers
 {
     [Route("api/[controller]")]
-    public class ChaptersController : Controller
+    [ApiController]
+    public class ChaptersController : ControllerBase
     {
         private readonly IPublisherRepository _publisherRepository;
         private readonly IEpicRepository _epicRepository;
@@ -28,7 +29,7 @@ namespace YourEpic.WebAPI.Controllers
         {
             if (_epicRepository.GetChapter(id) is Chapter chapter)
             {
-                return chapter;
+                return Ok(chapter);
             }
             return NotFound();
         }
