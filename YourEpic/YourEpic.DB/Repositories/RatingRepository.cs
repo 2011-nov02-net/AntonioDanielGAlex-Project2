@@ -7,19 +7,53 @@ namespace YourEpic.DB.Repositories
 {
     public class RatingRepository : IRatingRepository
     {
-        public void AddRatingForEpic(Domain.Models.Rating rating)
+        private readonly YourEpicProjectTwoDatabaseContext _context;
+
+        /// <summary>
+        /// A repository managing data access for Store objects,
+        /// using Entity Framework.
+        /// </summary>
+        public RatingRepository(YourEpicProjectTwoDatabaseContext context)
         {
-            var db_rating = Mappers.RatingMapper.MapFull(rating);
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public void RemoveRatingForEpic(Domain.Models.Rating rating)
+        public bool AddRatingForEpic(Domain.Models.Rating rating)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var db_rating = Mappers.RatingMapper.MapFull(rating);
+
+                _context.Add(db_rating);
+                _context.SaveChanges();
+                return true;
+            }
+            catch { return false; }
         }
 
-        public void UpdateRatingForEpic(Domain.Models.Rating rating)
+        public bool RemoveRatingForEpic(Domain.Models.Rating rating)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var db_rating = _context.Ratings.Find(rating.ID);
+                _context.Remove(db_rating);
+                _context.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
+        public bool UpdateRatingForEpic(Domain.Models.Rating rating)
+        {
+            try { 
+                Rating currentEntity = _context.Ratings.Find(rating.ID);
+                Rating newEntity = Mappers.RatingMapper.MapFull(rating);
+
+                _context.Entry(currentEntity).CurrentValues.SetValues(newEntity);
+
+                return true;
+            }
+            catch { return false; }
         }
     }
 }

@@ -21,8 +21,16 @@ namespace YourEpic.DB.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public IEnumerable<Domain.Models.Epic> GetAllEpics()
+        public IEnumerable<Domain.Models.Epic> GetAllEpics(string category = null)
         {
+            IQueryable<Epic> items = _context.Epics
+                   .Include(c => c.EpicCategories);
+
+            if (category != null)
+            {
+                items = items.Where(e=>e.EpicCategories.Any(c=>c.Category.Name == category));
+            }
+
             return _context.Epics.Select(Mappers.EpicMapper.Map);
         }
 

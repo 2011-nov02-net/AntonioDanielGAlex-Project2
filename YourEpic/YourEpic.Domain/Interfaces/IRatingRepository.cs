@@ -6,8 +6,8 @@ namespace YourEpic.Domain.Interfaces
 {
     public interface IRatingRepository
     {
-        void AddRatingForEpic(Models.Rating rating);
-        void RemoveRatingForEpic(Models.Rating rating);
-        void UpdateRatingForEpic(Models.Rating rating);
+        bool AddRatingForEpic(Models.Rating rating);
+        bool RemoveRatingForEpic(Models.Rating rating);
+        bool UpdateRatingForEpic(Models.Rating rating);
     }
 }

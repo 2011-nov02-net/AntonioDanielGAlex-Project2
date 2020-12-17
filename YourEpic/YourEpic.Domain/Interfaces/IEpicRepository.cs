@@ -7,7 +7,7 @@ namespace YourEpic.Domain.Interfaces
     {
         Epic GetEpicByID(int id);
 
-        IEnumerable<Epic> GetAllEpics();
+        IEnumerable<Epic> GetAllEpics(string category = null);
 
         IEnumerable<Epic> GetPublishersEpics(User user);
 
