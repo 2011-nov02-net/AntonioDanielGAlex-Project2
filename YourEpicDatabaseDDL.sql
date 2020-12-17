@@ -12,7 +12,7 @@ CREATE TABLE [ProjTwo].[User] (
 -- Get entire User Table
 SELECT * FROM [ProjTwo].[User];
 
---|--------------------- Add Foreign Key(s) ----------------------------|-
+--|--------------------- Add Foreign Key(s) ----------------------------|--
 -- ALTER TABLE [ProjTwo].[User] DROP CONSTRAINT FK_UserRole;
 ALTER TABLE [ProjTwo].[User]
 ADD CONSTRAINT FK_UserRole
@@ -37,6 +37,13 @@ ADD CONSTRAINT FK_EpicWriterID
 FOREIGN KEY (WriterID) REFERENCES [ProjTwo].[User](ID)
 ON DELETE CASCADE;
 
+-- Add Column to Determine if the Epic is Completed or Not
+ALTER TABLE [ProjTwo].[Epic]
+ADD DateCompleted DATETIME 
+
+-- Add Column to Give Brief Epic Description
+ALTER TABLE [ProjTwo].[Epic]
+ADD Concept NVARCHAR(300) 
  --------------------------------------------------------------------------------------
 -- Create Chapter Table
 -- DROP TABLE [ProjTwo].[Chapter]
@@ -106,6 +113,11 @@ ALTER TABLE [ProjTwo].[Comment]
 ADD CONSTRAINT FK_CommentEpicID
 FOREIGN KEY (EpicID) REFERENCES [ProjTwo].[Epic](ID)
 ON DELETE CASCADE;
+
+-- Add Column for identifying replying comments versus general comments
+-- ALTER TABLE [ProjTwo].[Comment]
+ALTER TABLE [ProjTwo].[Comment]
+ADD ReplyToComment INT NULL 
 ----------------------------------------------------------------------------------------
 -- Create Subscriptions Table
 -- DROP TABLE [ProjTwo].[Subscription]
