@@ -8,7 +8,5 @@ namespace YourEpic.Domain.Interfaces
         bool SubscribeToPublisher(int subscriberID, int publisherID);
 
         bool UnsubscribeFromPublisher(int subscriberID, int publisherID);
-
-        IEnumerable<Epic> GetMySubscriptions(int id);
     }
 }
