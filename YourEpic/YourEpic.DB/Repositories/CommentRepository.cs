@@ -87,7 +87,7 @@ namespace YourEpic.DB.Repositories
 
         public bool RespondToComment(int commentID, Domain.Models.Comment comment)
         {
-            //not sure how to implement this one yet
+            //still need to implement this one
             return false;
         }
 
