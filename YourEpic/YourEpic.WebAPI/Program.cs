@@ -13,8 +13,7 @@ namespace YourEpic.WebAPI
                 builder
                     .AddFilter("Microsoft", LogLevel.Information)
                     .AddFilter("System", LogLevel.Information)
-                    .AddConsole()
-                    .AddEventLog();
+                    .AddConsole();
             });
             ILogger logger = loggerFactory.CreateLogger<Program>();
             logger.LogInformation("Example log message");

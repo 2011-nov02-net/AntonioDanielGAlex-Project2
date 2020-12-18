@@ -33,9 +33,6 @@ namespace YourEpic.DB.Repositories
                 return false;
             }
 
-
-    
-
             dbEpicCatergory = new EpicCategory
             {
                 EpicId = epicID,
@@ -75,7 +72,7 @@ namespace YourEpic.DB.Repositories
         /// Add new category to database
         /// </summary>
         /// <param name="name">Name of category to add</param>
-        public void AddCategory(string name)
+        public bool AddCategory(string name)
         {
             var dbCategory = _context.Categories.FirstOrDefault(c => c.Name == name);
 
@@ -88,7 +85,9 @@ namespace YourEpic.DB.Repositories
 
                 _context.Categories.Add(dbCategory);
                 _context.SaveChanges();
+                return true;
             }
+            return false;
         }
 
 
