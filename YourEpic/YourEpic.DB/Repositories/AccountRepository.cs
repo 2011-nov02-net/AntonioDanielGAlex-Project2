@@ -25,7 +25,7 @@ namespace YourEpic.DB.Repositories
         public bool CreateAccount(Domain.Models.User user)
         {
             var dbUser = _context.Users
-                .FirstOrDefault(u => u.Id == user.ID);
+                .FirstOrDefault(u => u.Email == user.Email);
 
             if(dbUser != null)
             {
@@ -34,7 +34,6 @@ namespace YourEpic.DB.Repositories
 
             dbUser = new User
             {
-                Id = user.ID,
                 Name = user.Name,
                 Role = user.UserRole.ID,
                 Email = user.Email

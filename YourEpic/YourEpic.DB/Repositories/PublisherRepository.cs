@@ -31,7 +31,6 @@ namespace YourEpic.DB.Repositories
 
             var dbChapter = new Chapter
             {
-                Id = chapter.ID,
                 Title = chapter.Title,
                 EpicId = chapter.ChapterEpic.ID,
                 DateCreated = chapter.Date,
@@ -48,7 +47,6 @@ namespace YourEpic.DB.Repositories
         {
             var dbEpic = new Epic
             {
-                Id = epic.ID,
                 Name = epic.Title,
                 WriterId = epic.Writer.ID,
                 DateCreated = epic.Date

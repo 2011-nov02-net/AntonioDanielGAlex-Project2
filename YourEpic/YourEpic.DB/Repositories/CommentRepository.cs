@@ -26,7 +26,6 @@ namespace YourEpic.DB.Repositories
         {
             var dbComment = new Comment
             {
-                Id = comment.ID,
                 CommenterId = comment.Commenter.ID,
                 EpicId = comment.CommentEpic.ID,
                 Comment1 = comment.CommentContent,

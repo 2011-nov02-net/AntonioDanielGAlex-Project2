@@ -70,6 +70,7 @@ namespace YourEpic.WebAPI.Controllers
             if (_accountRepository.GetUserByID(user.ID) is User)
             {
                 _accountRepository.EditAccount(user);
+                return NoContent();
             }
 
             return NotFound();

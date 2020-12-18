@@ -17,7 +17,7 @@ namespace YourEpic.Domain.Models
         public int ChapterCount { get; set; }
         public int CommentCount { get; set; }
         public int RatingCount { get; set; }
-        public double AverageRating => Ratings.Average(r => r.RatingNumber);
+        public double AverageRating { get; set; }
 
         public Chapter GetChapterById(int id)
         {
