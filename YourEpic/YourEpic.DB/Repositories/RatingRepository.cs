@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using YourEpic.Domain.Interfaces;
+using YourEpic.Domain.Models;
 
 
 namespace YourEpic.DB.Repositories
@@ -23,7 +24,7 @@ namespace YourEpic.DB.Repositories
             Domain.Models.Rating nonDB_rating;
             try {
                 var db_rating = _context.Ratings.Find(ratingID);
-                nonDB_rating = new Domain.Models.Rating { ID = db_rating.Id, RatingNumber = db_rating.Rating1}
+                nonDB_rating = new Domain.Models.Rating { ID = db_rating.Id, RatingNumber = db_rating.Rating1};
             }
             catch {
                 return null;
