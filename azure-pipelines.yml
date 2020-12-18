@@ -125,7 +125,7 @@ stages:
             inputs:
               ConnectionType: 'AzureRM'
               azureSubscription: 'Mendez Azure Subscription(e651ad7e-a3af-4e5b-9734-05a198120bd7)'
-              appType: 'webApp'
-              WebAppName: 'YourEpic'
+              appType: 'apiApp'
+              WebAppName: 'yourepic-api'
               packageForLinux: '$(Pipeline.Workspace)/app'
               
