@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using YourEpic.Domain.Interfaces;
+using YourEpic.Domain.Models;
+
 
 namespace YourEpic.DB.Repositories
 {
@@ -16,6 +18,18 @@ namespace YourEpic.DB.Repositories
         public RatingRepository(YourEpicProjectTwoDatabaseContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
+
+        public Domain.Models.Rating GetRatingByID(int ratingID) {
+            Domain.Models.Rating nonDB_rating;
+            try {
+                var db_rating = _context.Ratings.Find(ratingID);
+                nonDB_rating = new Domain.Models.Rating { ID = db_rating.Id, RatingNumber = db_rating.Rating1};
+            }
+            catch {
+                return null;
+            }
+            return nonDB_rating;
         }
 
         public bool AddRatingForEpic(Domain.Models.Rating rating)
