@@ -99,8 +99,28 @@ namespace YourEpic.DB.Repositories
 
         public bool RespondToComment(int commentID, Domain.Models.Comment comment)
         {
-            //still need to implement this one
-            return false;
+            var dbComment = _context.Comments.FirstOrDefault(c => c.Id == commentID);
+
+            if (dbComment == null)
+            {
+                //comment to respond to doesn't exist
+                return false;
+            }
+
+            dbComment = new Comment
+            {
+                Id = comment.ID,
+                CommenterId = comment.Commenter.ID,
+                EpicId = comment.CommentEpic.ID,
+                Comment1 = comment.CommentContent,
+                DateCreated = (DateTime)comment.Date,
+                ReplyToComment = commentID
+            };
+
+            _context.Comments.Add(dbComment);
+            _context.SaveChanges();
+
+            return true;
         }
 
     }
