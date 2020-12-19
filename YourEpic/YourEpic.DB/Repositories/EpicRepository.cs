@@ -28,10 +28,14 @@ namespace YourEpic.DB.Repositories
 
             if (category != null)
             {
-                items = items.Where(e=>e.EpicCategories.Any(c=>c.Category.Name == category));
+                items = items.Where(e => e.EpicCategories.Any(c => c.Category.Name == category));
+            }
+            if (title != null)
+            {
+                items = items.Where(e => e.Name == title);
             }
 
-            return _context.Epics.Select(Mappers.EpicMapper.Map);
+            return items.Select(Mappers.EpicMapper.Map);
         }
 
         public Domain.Models.Epic GetEpicByID(int id)
