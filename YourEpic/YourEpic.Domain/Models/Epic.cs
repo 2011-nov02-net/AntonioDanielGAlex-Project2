@@ -8,16 +8,17 @@ namespace YourEpic.Domain.Models
     {
         public int ID { get; set; }
         public string Title { get; set; }
+        public string Concept { get; set; }
         public User Writer { get; set; }
         public DateTime Date { get; set; }
         public IEnumerable<Chapter> Chapters { get; set; }
-        public IEnumerable<Comment> Comments { get; set; }
-        public IEnumerable<Rating> Ratings { get; set; }
-        public IEnumerable<Category> Categories { get; set; }
         public int ChapterCount { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
         public int CommentCount { get; set; }
-        public int RatingCount { get; set; }
-        public double AverageRating => Ratings.Average(r => r.RatingNumber);
+        public IEnumerable<Rating> Ratings { get; set; }
+        public double RatingAverage { get; set; }
+        public int TotalRatings { get; set; }
+        public IEnumerable<Category> Categories { get; set; }
 
         public Chapter GetChapterById(int id)
         {

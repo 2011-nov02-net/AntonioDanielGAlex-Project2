@@ -19,7 +19,7 @@ namespace YourEpic.WebAPI.Controllers
 
         public CategoriesController(ICategoryRepository categoryRepository)
         {
-            categoryRepository = _categoryRepository;
+            _categoryRepository = categoryRepository;
         }
 
 
