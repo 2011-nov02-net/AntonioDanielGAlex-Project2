@@ -55,14 +55,13 @@ namespace YourEpic.WebAPI.Controllers
 
         // POST: api/epics/
         [HttpPost]
-        public async Task<IActionResult> AddEpic(EpicModel epicm)
+        public async Task<IActionResult> AddEpic(Epic epic)
         {
 
-            var completed = true;//await Task.FromResult(_epicRepository.AddEpic(epic));
+            var completed = await Task.FromResult(_epicRepository.AddEpic(epic));
             if (completed)
             {
-                return Ok();
-                //return CreatedAtAction(nameof(GetEpicByID), new { id = epic.ID }, epic);
+                return CreatedAtAction(nameof(GetEpicByID), new { id = epic.ID }, epic);
             }
             return BadRequest();
         }
