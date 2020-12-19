@@ -28,7 +28,7 @@ namespace YourEpic.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Role>>> Get()
         {
-            var roles = Task.FromResult(_rolesRepository.GetRoles());
+            var roles = await Task.FromResult(_rolesRepository.GetRoles());
             if (roles is IEnumerable<Role>)
             {
                 return Ok(roles);
