@@ -5,7 +5,7 @@ namespace YourEpic.WebAPI.Models
     {
         public UserModel Publisher { get; set; }
 
-        public string HasNewContent { get; set; }
+        public bool HasNewContent { get; set; }
 
     }
 }
