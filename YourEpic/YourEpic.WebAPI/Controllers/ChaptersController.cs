@@ -25,53 +25,64 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET: api/chapters/{id}
         [HttpGet("{id}")]
-        public ActionResult<Chapter> GetById(int id)
+        public async Task<ActionResult<Chapter>> GetById(int id)
         {
-            if (_chapterRepository.GetChapterByID(id) is Chapter chapter)
+            var m_chapter = await Task.FromResult(_chapterRepository.GetChapterByID(id));
+            if (m_chapter is Chapter chapter)
             {
                 return Ok(chapter);
             }
+
             return NotFound();
         }
 
         // POST: api/chapters
         [HttpPost]
-        public IActionResult Post(Chapter chapter)
+        public async Task<IActionResult> Post(Chapter chapter)
         {
-            if (_chapterRepository.AddChapter(chapter))
+            var completed = await Task.FromResult(_chapterRepository.AddChapter(chapter));
+            if (completed)
             {
                 return CreatedAtAction(nameof(GetById), new { id = chapter.ID }, chapter);
             }
+
             return BadRequest();
         }
 
-
         // PUT: api/chapters/{id}
         [HttpPut("{id}")]
-        public IActionResult Put(int chapterID, [FromBody] Chapter newChapter)
+        public async Task<IActionResult> Put(int chapterID, [FromBody] Chapter newChapter)
         {
-            if(_chapterRepository.GetChaptersByEpicID(chapterID) is Chapter)
+
+            if (_chapterRepository.GetChaptersByEpicID(chapterID) is Chapter)
             {
-                _chapterRepository.UpdateChapter(newChapter);
-
-                return NoContent();
+                var completed = await Task.FromResult(_chapterRepository.UpdateChapter(newChapter));
+                if (completed)
+                {
+                    return NoContent();
+                }
+                else
+                { return BadRequest(); }
             }
-
 
             return NotFound();
         }
 
         // DELETE: api/chapters/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(Chapter chapter)
+        public async Task<IActionResult> Delete(Chapter chapter)
         {
             // Check 
             if (_chapterRepository.GetChapterByID(chapter.ID) is Chapter)
             {
-                _chapterRepository.DeleteChapter(chapter);
-
-                return NoContent();
+                var completed = await Task.FromResult(_chapterRepository.DeleteChapter(chapter));
+                if (completed)
+                {
+                    return NoContent();
+                }
+                else { return BadRequest(); }
             }
+
             return NotFound();
         }
     }

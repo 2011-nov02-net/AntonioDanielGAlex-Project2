@@ -17,12 +17,10 @@ namespace YourEpic.WebAPI.Controllers
     {
         private readonly ICommentRepository _commentRepository;
 
-        public CommentsController(ICommentRepository commentRepository) {
+        public CommentsController(ICommentRepository commentRepository)
+        {
             _commentRepository = commentRepository;
         }
-
-
-
 
         // GET api/values/5
         [HttpGet("{epicID}")]
@@ -30,7 +28,9 @@ namespace YourEpic.WebAPI.Controllers
         public async Task<ActionResult<IEnumerable<Comment>>> Get(int epicID)
         {
             var comments = await Task.FromResult(_commentRepository.GetCommentsForEpic(epicID));
-            if (comments is IEnumerable<Comment> retrievedComments) {
+            
+            if (comments is IEnumerable<Comment> retrievedComments)
+            {
                 return Ok(retrievedComments);
             }
             return NotFound();
@@ -42,20 +42,21 @@ namespace YourEpic.WebAPI.Controllers
         public async Task<IActionResult> Post(Comment comment)
         {
             var pass = await Task.FromResult(_commentRepository.AddComment(comment));
-            if (pass == true) {
+            if (pass)
+            {
                 return Ok();
             }
             return BadRequest();
         }
 
-
-                // POST api/comments
+        // POST api/comments
         [HttpPost("comment/{commentID}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post(int commentID, Comment comment)
         {
             var pass = await Task.FromResult(_commentRepository.RespondToComment(commentID, comment));
-            if (pass == true) {
+            if (pass)
+            {
                 return Ok();
             }
             return BadRequest();
@@ -68,7 +69,8 @@ namespace YourEpic.WebAPI.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var pass = await Task.FromResult(_commentRepository.DeleteComment(id));
-            if (pass == true) {
+            if (pass)
+            {
                 return NoContent();
             }
             return NotFound();
