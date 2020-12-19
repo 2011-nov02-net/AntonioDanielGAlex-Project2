@@ -22,7 +22,6 @@ namespace YourEpic.WebAPI.Controllers
             _categoryRepository = categoryRepository;
         }
 
-
         // GET: api/categories
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -36,7 +35,6 @@ namespace YourEpic.WebAPI.Controllers
 
             return NotFound();
         }
-
 
         // POST: api/categories/epic/{epicID}
         [HttpPost("epic/{epicID}")]
@@ -64,6 +62,5 @@ namespace YourEpic.WebAPI.Controllers
 
             return BadRequest();
         }
-
     }
 }

@@ -52,10 +52,10 @@ namespace YourEpic.DB.Repositories
 
             foreach (var epic in db_epics)
             {
-                if (epic.AverageRating > highestRating)
+                if (epic.RatingAverage > highestRating)
                 {
                     highestRatedEpic = epic;
-                    highestRating = epic.AverageRating;
+                    highestRating = epic.RatingAverage;
                 }
             }
 

@@ -35,7 +35,8 @@ namespace YourEpic.DB.Mappers
                 ID = entity.Id,
                 Title = entity.Name,
                 Date = (DateTime)entity.DateCreated,
-                Ratings = entity.Ratings.Select(RatingMapper.Map)
+                Ratings = entity.Ratings.Select(RatingMapper.Map),
+                RatingAverage = entity.Ratings.Average(r=>r.Rating1)
             };
         }
         public static Domain.Models.Epic MapWithWriter(Epic entity)
