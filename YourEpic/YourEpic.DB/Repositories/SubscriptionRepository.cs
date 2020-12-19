@@ -14,7 +14,7 @@ namespace YourEpic.DB.Repositories
             _context = context;
         }
 
-        public IEnumerable<Domain.Models.Epic> GetMySubscriptions(int id)
+        public IEnumerable<Domain.Models.Subscription> GetMySubscriptions(int userID)
         {
             throw new NotImplementedException();
         }

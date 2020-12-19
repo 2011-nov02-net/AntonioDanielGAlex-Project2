@@ -15,14 +15,14 @@ namespace YourEpic.WebAPI.Controllers
     public class EpicsController : ControllerBase
     {
         private readonly IEpicRepository _epicRepository;
-        private readonly IPublisherRepository _publisherRepository;
-        private readonly IReaderRepository _readerRepository;
+        private readonly IChapterRepository _chapterRepository;
+        private readonly IRatingRepository _ratingRepository;
 
-        public EpicsController(IEpicRepository epicRepository, IPublisherRepository publisherRepository, IReaderRepository readerRepository)
+        public EpicsController(IEpicRepository epicRepository, IChapterRepository chapterRepository, IRatingRepository ratingRepository)
         {
             _epicRepository = epicRepository;
-            _publisherRepository = publisherRepository;
-            _readerRepository = readerRepository;
+            _chapterRepository = chapterRepository;
+            _ratingRepository = ratingRepository;
         }
 
 
@@ -56,7 +56,7 @@ namespace YourEpic.WebAPI.Controllers
         [HttpPost]
         public IActionResult AddEpic(Epic epic)
         {
-            if (_publisherRepository.AddEpic(epic))
+            if (_epicRepository.AddEpic(epic))
             {
                 return CreatedAtAction(nameof(GetEpicByID), new { id = epic.ID }, epic);
             }
@@ -68,7 +68,7 @@ namespace YourEpic.WebAPI.Controllers
         [HttpGet("{id}/chapters")]
         public ActionResult<IEnumerable<Chapter>> GetChapters(int id)
         {
-            if (_epicRepository.GetChapters(id) is IEnumerable<Chapter> chapters)
+            if (_chapterRepository.GetChaptersByEpicID(id) is IEnumerable<Chapter> chapters)
             {
                 return Ok(chapters.ToList());
             }
@@ -82,7 +82,7 @@ namespace YourEpic.WebAPI.Controllers
         {
             if (_epicRepository.GetEpicByID(id) is Epic epic)
             {
-                _publisherRepository.DeleteEpic(epic);
+                _epicRepository.DeleteEpic(epic);
                 return NoContent();
             }
             return NotFound();
@@ -93,7 +93,7 @@ namespace YourEpic.WebAPI.Controllers
         [HttpPost("{epicID}/ratings")]
         public IActionResult PostRating(int epicID, Rating rating)
         {
-            if (_readerRepository.MakeRating(rating))
+            if (_ratingRepository.AddRatingForEpic(rating))
             {
                 return Ok();
             }

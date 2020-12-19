@@ -14,12 +14,12 @@ namespace YourEpic.WebAPI.Controllers
     [ApiController]
     public class ChaptersController : ControllerBase
     {
-        private readonly IPublisherRepository _publisherRepository;
+        private readonly IChapterRepository _chapterRepository;
         private readonly IEpicRepository _epicRepository;
 
-        public ChaptersController(IPublisherRepository publisherRepository, IEpicRepository epicRepository)
+        public ChaptersController(IChapterRepository chapterRepository, IEpicRepository epicRepository)
         {
-            _publisherRepository = publisherRepository;
+            _chapterRepository = chapterRepository;
             _epicRepository = epicRepository;
         }
 
@@ -27,7 +27,7 @@ namespace YourEpic.WebAPI.Controllers
         [HttpGet("{id}")]
         public ActionResult<Chapter> GetById(int id)
         {
-            if (_epicRepository.GetChapter(id) is Chapter chapter)
+            if (_chapterRepository.GetChapterByID(id) is Chapter chapter)
             {
                 return Ok(chapter);
             }
@@ -38,7 +38,7 @@ namespace YourEpic.WebAPI.Controllers
         [HttpPost]
         public IActionResult Post(Chapter chapter)
         {
-            if (_publisherRepository.AddChapter(chapter))
+            if (_chapterRepository.AddChapter(chapter))
             {
                 return CreatedAtAction(nameof(GetById), new { id = chapter.ID }, chapter);
             }
@@ -50,9 +50,9 @@ namespace YourEpic.WebAPI.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int chapterID, [FromBody] Chapter newChapter)
         {
-            if(_epicRepository.GetChapter(chapterID) is Chapter)
+            if(_chapterRepository.GetChaptersByEpicID(chapterID) is Chapter)
             {
-                _publisherRepository.EditChapter(newChapter);
+                _chapterRepository.UpdateChapter(newChapter);
 
                 return NoContent();
             }
@@ -66,9 +66,9 @@ namespace YourEpic.WebAPI.Controllers
         public IActionResult Delete(Chapter chapter)
         {
             // Check 
-            if (_epicRepository.GetChapter(chapter.ID) is Chapter)
+            if (_chapterRepository.GetChapterByID(chapter.ID) is Chapter)
             {
-                _publisherRepository.EditChapter(chapter);
+                _chapterRepository.DeleteChapter(chapter);
 
                 return NoContent();
             }

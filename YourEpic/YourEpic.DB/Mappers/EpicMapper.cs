@@ -13,7 +13,8 @@ namespace YourEpic.DB.Mappers
             {
                 ID = entity.Id,
                 Title = entity.Name,
-                Date = (DateTime)entity.DateCreated
+                Date = (DateTime)entity.DateCreated,
+                Writer = new Domain.Models.User {ID = entity.Writer.Id, Name=entity.Writer.Name }
             };
         }
         public static Epic Map(Domain.Models.Epic model)

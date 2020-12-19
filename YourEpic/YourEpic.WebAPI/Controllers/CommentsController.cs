@@ -29,7 +29,7 @@ namespace YourEpic.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<Comment>>> Get(int epicID)
         {
-            var comments = await Task.FromResult(_commentRepository.GetComments(epicID));
+            var comments = await Task.FromResult(_commentRepository.GetCommentsForEpic(epicID));
             if (comments is IEnumerable<Comment> retrievedComments) {
                 return Ok(retrievedComments);
             }

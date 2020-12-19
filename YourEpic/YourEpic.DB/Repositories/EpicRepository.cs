@@ -21,7 +21,7 @@ namespace YourEpic.DB.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public IEnumerable<Domain.Models.Epic> GetAllEpics(string category = null)
+        public IEnumerable<Domain.Models.Epic> GetAllEpics(string title = null, string category = null)
         {
             IQueryable<Epic> items = _context.Epics
                    .Include(c => c.EpicCategories);
@@ -32,16 +32,6 @@ namespace YourEpic.DB.Repositories
             }
 
             return _context.Epics.Select(Mappers.EpicMapper.Map);
-        }
-
-        public Domain.Models.Chapter GetChapter(int chapterID)
-        {
-            return Mappers.ChapterMapper.Map(_context.Chapters.First(c => c.Id == chapterID));
-        }
-
-        public IEnumerable<Domain.Models.Chapter> GetChapters(int epicID)
-        {
-            return _context.Chapters.Where(e => e.EpicId == epicID).Select(Mappers.ChapterMapper.Map);
         }
 
         public Domain.Models.Epic GetEpicByID(int id)
@@ -88,6 +78,68 @@ namespace YourEpic.DB.Repositories
                 return true;
             }
             catch { return false; }
+        }
+
+        public bool UpdateEpicCompleteness(Domain.Models.Epic epic)
+        {
+            try
+            {
+                var db_epic = Mappers.EpicMapper.Map(epic);
+
+                _context.Add(db_epic);
+                _context.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
+        public bool AddEpic(Domain.Models.Epic epic)
+        {
+            var dbEpic = new Epic
+            {
+                Id = epic.ID,
+                Name = epic.Title,
+                WriterId = epic.Writer.ID,
+                DateCreated = epic.Date
+            };
+
+            _context.Epics.Add(dbEpic);
+            _context.SaveChanges();
+
+            return true;
+        }
+
+        public bool DeleteEpic(Domain.Models.Epic epic)
+        {
+
+            var dbEpic = _context.Epics.FirstOrDefault(e => e.Id == epic.ID);
+
+            if (dbEpic == null)
+            {
+                return false;
+            }
+
+            _context.Epics.Remove(dbEpic);
+            _context.SaveChanges();
+
+            return true;
+        }
+
+        public IEnumerable<Domain.Models.Epic> GetEpicsSubscribedTo(int subscriberID)
+        {
+            var epics = _context.Subscriptions.Where(s => s.SubscriberId == subscriberID)
+                .Join(_context.Epics, s => s.WriterId, e => e.WriterId, (s, e) => new Epic
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    WriterId = e.WriterId,
+                    Concept = e.Concept,
+                    DateCreated = (DateTime)e.DateCreated
+                });
+
+            var domainEpics = epics.Select(e => new Domain.Models.Epic { ID = e.Id, Title = e.Name });
+
+            return domainEpics;
         }
     }
 }

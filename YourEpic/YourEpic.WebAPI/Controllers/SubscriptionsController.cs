@@ -16,19 +16,17 @@ namespace YourEpic.WebAPI.Controllers
     {
 
         private readonly ISubscriptionRepository _subscriptionRepository;
-        private readonly IReaderRepository _readerRepository;
 
-        public SubscriptionsController(ISubscriptionRepository subscriptionRepository, IReaderRepository readerRepository)
+        public SubscriptionsController(ISubscriptionRepository subscriptionRepository)
         {
             _subscriptionRepository = subscriptionRepository;
-            _readerRepository = readerRepository;
         }
 
         // GET api/<SubscriptionsController>/5
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            if (_readerRepository.GetEpicsSubscribedTo(id) is IEnumerable<Epic> subscriptions)
+            if (_subscriptionRepository.GetMySubscriptions(id) is IEnumerable<Subscription> subscriptions)
             {
                 return Ok(subscriptions);
             }

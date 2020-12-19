@@ -7,7 +7,7 @@ namespace YourEpic.Domain.Interfaces
     {
         Epic GetEpicByID(int id);
 
-        IEnumerable<Epic> GetAllEpics(string category = null);
+        IEnumerable<Epic> GetAllEpics(string title = null, string category = null);
 
         IEnumerable<Epic> GetPublishersEpics(User user);
 
@@ -16,9 +16,9 @@ namespace YourEpic.Domain.Interfaces
         Epic GetHighestRatedEpic();
 
         Epic GetFeaturedEpic();
+        bool UpdateEpicCompleteness(Epic epic);
+        bool AddEpic(Epic epic);
+        bool DeleteEpic(Epic epic);
 
-        Chapter GetChapter(int id);
-
-        IEnumerable<Chapter> GetChapters(int epicID);
     }
 }
