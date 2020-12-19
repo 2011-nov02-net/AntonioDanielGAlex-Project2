@@ -5,7 +5,9 @@ namespace YourEpic.WebAPI.Models
     {
         public int ID { get; set;}
         public string CommenterName { get; set; }
-        public string CommentCount { get; set; }
+        public int CommenterID { get; set; }
+        public string CommentContent { get; set; }
         public DateTime DateOfComment { get; set; }
+        public int ReplyToComment { get; set; }
     }
 }
