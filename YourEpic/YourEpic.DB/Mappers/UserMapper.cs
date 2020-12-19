@@ -13,5 +13,14 @@ namespace YourEpic.DB.Mappers
                 Email = entity.Email
             };
         }
+
+        public static User Map(Domain.Models.User model) {
+            return new User {
+                Id = model.ID,
+                Email = model.Email,
+                Name = model.Name,
+                Role = model.UserRole.ID
+            };
+        }
     }
 }

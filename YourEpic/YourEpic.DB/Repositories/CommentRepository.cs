@@ -122,6 +122,5 @@ namespace YourEpic.DB.Repositories
 
             return true;
         }
-
     }
 }

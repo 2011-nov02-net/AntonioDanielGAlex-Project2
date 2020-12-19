@@ -26,11 +26,11 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET: api/users
         [HttpGet]
-        public ActionResult<IEnumerable<User>> Get()
+        public async Task<ActionResult<IEnumerable<User>>> Get()
         {
-            if (_accountRepository.GetUsers() is IEnumerable<User>)
+            var m_user = await Task.FromResult(_accountRepository.GetUsers());
+            if ( m_user is IEnumerable<User> users)
             {
-                IEnumerable<User> users = _accountRepository.GetUsers();
                 return Ok(users);
             }
             return NotFound();
@@ -39,9 +39,10 @@ namespace YourEpic.WebAPI.Controllers
 
         // POST: api/users
         [HttpPost]
-        public IActionResult Post(User user)
+        public async Task<IActionResult> Post(User user)
         {
-            if (_accountRepository.CreateAccount(user))
+            var created = await Task.FromResult(_accountRepository.CreateAccount(user));
+            if (created)
             {
                 return CreatedAtAction(nameof(Get), new { id = user.ID }, user);
             }
@@ -51,9 +52,10 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET: api/users/5
         [HttpGet("{id}")]
-        public ActionResult<User> Get(int id)
+        public async Task<ActionResult<User>> Get(int id)
         {
-            if (_accountRepository.GetUserByID(id) is User user)
+            var d_user = await Task.FromResult(_accountRepository.GetUserByID(id));
+            if (d_user is User user)
             {
                 return Ok(user);
             }
@@ -64,12 +66,17 @@ namespace YourEpic.WebAPI.Controllers
 
         // PUT: api/users/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, User user)
+        public async Task<IActionResult> Put(int id, User user)
         {
-
             if (_accountRepository.GetUserByID(user.ID) is User)
             {
-                _accountRepository.EditAccount(user);
+                var updated = await Task.FromResult(_accountRepository.EditAccount(user));
+                if (updated)
+                {
+
+                    return Ok();
+                }
+                else { return BadRequest(); }
             }
 
             return NotFound();
@@ -78,12 +85,16 @@ namespace YourEpic.WebAPI.Controllers
 
         // DELETE: api/users/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (_accountRepository.GetUserByID(id) is User)
             {
-                _accountRepository.DeleteAccount(id);
-                return NoContent();
+                var deleted = await Task.FromResult(_accountRepository.DeleteAccount(id));
+                if (deleted)
+                {
+                    return NoContent();
+                }
+                else { return BadRequest(); }
             }
 
             return NotFound();
@@ -93,13 +104,13 @@ namespace YourEpic.WebAPI.Controllers
         // Need to pass in the user id for the route, and the user to call the function
         // GET: api/users/{id}/epics
         [HttpGet("{id}/epics")]
-        public ActionResult<IEnumerable<Epic>> GetUserEpics(int id, User user)
+        public async Task<ActionResult<IEnumerable<Epic>>> GetUserEpics(int id, User user)
         {
-            if (_epicRepository.GetPublishersEpics(user) is IEnumerable<Epic>)
+            var d_epics = await Task.FromResult(_epicRepository.GetPublishersEpics(user));
+            if (d_epics is IEnumerable<Epic> epics)
             {
-                return Ok(_epicRepository.GetPublishersEpics(user).ToList());
+                return Ok(epics);
             }
-
 
             return NotFound();
         }

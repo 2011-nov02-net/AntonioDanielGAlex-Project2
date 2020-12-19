@@ -42,7 +42,7 @@ namespace YourEpic.WebAPI.Controllers
         public async Task<IActionResult> Post(int categoryID, int epicID)
         {
             var pass = await Task.FromResult(_categoryRepository.CategorizeEpic(categoryID, epicID));
-            if (pass == true)
+            if (pass)
             {
                 return Ok();
             }
@@ -55,7 +55,7 @@ namespace YourEpic.WebAPI.Controllers
         public async Task<IActionResult> NewCategory(Category category)
         {
             var pass = await Task.FromResult(_categoryRepository.AddCategory(category.Name));
-            if (pass == true)
+            if (pass)
             {
                 return Ok();
             }

@@ -24,9 +24,10 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET api/<SubscriptionsController>/5
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            if (_subscriptionRepository.GetMySubscriptions(id) is IEnumerable<Subscription> subscriptions)
+            var result = await Task.FromResult(_subscriptionRepository.GetMySubscriptions(id));
+            if (result is IEnumerable<Subscription> subscriptions)
             {
                 return Ok(subscriptions);
             }
@@ -35,9 +36,10 @@ namespace YourEpic.WebAPI.Controllers
 
         [HttpPost("{publisherID}/subscribee/{subscriber}")]
 
-        public IActionResult Post(int subscriber, int publisherID)
+        public async Task<IActionResult> Post(int subscriber, int publisherID)
         {
-            if (_subscriptionRepository.SubscribeToPublisher(subscriber, publisherID))
+            var created = await Task.FromResult(_subscriptionRepository.SubscribeToPublisher(subscriber, publisherID));
+            if (created)
             {
                 return Ok();
             }
@@ -45,9 +47,10 @@ namespace YourEpic.WebAPI.Controllers
         }
 
         [HttpDelete("{publisherID}/subscribee/{subscriber}")]
-        public IActionResult Delete(int subscriber, int publisherID)
+        public async Task<IActionResult> Delete(int subscriber, int publisherID)
         {
-            if (_subscriptionRepository.UnsubscribeFromPublisher(subscriber, publisherID))
+            var deleted = await Task.FromResult(_subscriptionRepository.UnsubscribeFromPublisher(subscriber, publisherID));
+            if (deleted)
             {
                 return Ok();
             }

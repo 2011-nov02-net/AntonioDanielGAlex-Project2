@@ -20,6 +20,16 @@ namespace YourEpic.Domain.Models
         public int TotalRatings { get; set; }
         public IEnumerable<Category> Categories { get; set; }
 
+        public double GetAverageRating()
+        {
+            return Ratings.Average(r => r.RatingNumber);
+        }
+
+        public Rating GetRatingByUserID(int userID)
+        {
+            return Ratings.First(r => r.Rater.ID == userID);
+        }
+
         public Chapter GetChapterById(int id)
         {
             Chapter chapter = Chapters.FirstOrDefault(c => c.ID == id);
@@ -34,6 +44,10 @@ namespace YourEpic.Domain.Models
             return chapter;
         }
 
+        public int GetChapterCount()
+        {
+            return Chapters.ToList().Count();
+        }
         public List<Comment> GetCommentsByUserId(int id)
         {
             List<Comment> comments;
@@ -44,10 +58,15 @@ namespace YourEpic.Domain.Models
             }
             catch (InvalidOperationException)
             {
-                return null;
+                return new List<Comment>();
             }
 
             return comments;
+        }
+
+        public int GetCommentCount()
+        {
+            return Comments.ToList().Count();
         }
 
         public Rating GetRatingByUserId(int id)
@@ -60,10 +79,15 @@ namespace YourEpic.Domain.Models
             }
             catch (InvalidOperationException)
             {
-                return null;
+                return new Rating();
             }
 
             return rating;
+        }
+
+        public int GetRatingCount()
+        {
+            return Ratings.ToList().Count();
         }
 
     }

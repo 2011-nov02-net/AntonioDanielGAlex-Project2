@@ -9,5 +9,6 @@ namespace YourEpic.Domain.Models
         public Epic CommentEpic { get; set; }
         public string CommentContent { get; set; }
         public DateTime Date { get; set; }
+        public int? ReplyToComment { get; set;}
     }
 }

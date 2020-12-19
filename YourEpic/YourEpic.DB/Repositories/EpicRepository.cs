@@ -23,7 +23,7 @@ namespace YourEpic.DB.Repositories
 
         public IEnumerable<Domain.Models.Epic> GetAllEpics(string title = null, string category = null)
         {
-            IQueryable<Epic> items = _context.Epics
+            IQueryable<Epic> items = _context.Epics.Include(w=>w.Writer)
                    .Include(c => c.EpicCategories);
 
             if (category != null)
@@ -36,7 +36,7 @@ namespace YourEpic.DB.Repositories
 
         public Domain.Models.Epic GetEpicByID(int id)
         {
-            return Mappers.EpicMapper.Map(_context.Epics.First(e => e.Id == id));
+            return Mappers.EpicMapper.Map(_context.Epics.Include(w=>w.Writer).First(e => e.Id == id));
         }
 
         public Domain.Models.Epic GetFeaturedEpic()
@@ -111,7 +111,6 @@ namespace YourEpic.DB.Repositories
 
         public bool DeleteEpic(Domain.Models.Epic epic)
         {
-
             var dbEpic = _context.Epics.FirstOrDefault(e => e.Id == epic.ID);
 
             if (dbEpic == null)

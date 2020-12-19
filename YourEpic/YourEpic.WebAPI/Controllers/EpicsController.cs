@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
+using YourEpic.WebAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,22 +29,22 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET: api/epics
         [HttpGet]
-        public ActionResult<IEnumerable<Epic>> Get()
+        public async Task<ActionResult<IEnumerable<Epic>>> Get()
         {
-            if (_epicRepository.GetAllEpics() is IEnumerable<Epic>)
+            var epics = await Task.FromResult(_epicRepository.GetAllEpics());
+            if (epics is IEnumerable<Epic>)
             {
-                return Ok(_epicRepository.GetAllEpics().ToList());
+                return Ok(epics);
             }
             return NotFound();
-
-
         }
 
         // GET: api/epics/{id}
         [HttpGet("{id}")]
-        public ActionResult<Epic> GetEpicByID(int id)
+        public async Task<ActionResult<Epic>> GetEpicByID(int id)
         {
-            if (_epicRepository.GetEpicByID(id) is Epic epic)
+            var m_epic = await Task.FromResult(_epicRepository.GetEpicByID(id));
+            if (m_epic is Epic epic)
             {
                 return Ok(epic);
             }
@@ -54,21 +55,25 @@ namespace YourEpic.WebAPI.Controllers
 
         // POST: api/epics/
         [HttpPost]
-        public IActionResult AddEpic(Epic epic)
+        public async Task<IActionResult> AddEpic(EpicModel epicm)
         {
-            if (_epicRepository.AddEpic(epic))
+
+            var completed = true;//await Task.FromResult(_epicRepository.AddEpic(epic));
+            if (completed)
             {
-                return CreatedAtAction(nameof(GetEpicByID), new { id = epic.ID }, epic);
+                return Ok();
+                //return CreatedAtAction(nameof(GetEpicByID), new { id = epic.ID }, epic);
             }
-            return BadRequest();  
+            return BadRequest();
         }
 
         // Here id is the epicID you want to look at/read
         // GET api/epic/{id}/chapters
         [HttpGet("{id}/chapters")]
-        public ActionResult<IEnumerable<Chapter>> GetChapters(int id)
+        public async Task<ActionResult<IEnumerable<Chapter>>> GetChaptersForEpic(int id)
         {
-            if (_chapterRepository.GetChaptersByEpicID(id) is IEnumerable<Chapter> chapters)
+            var m_chapters = await Task.FromResult(_chapterRepository.GetChaptersByEpicID(id));
+            if (m_chapters is IEnumerable<Chapter> chapters)
             {
                 return Ok(chapters.ToList());
             }
@@ -78,12 +83,17 @@ namespace YourEpic.WebAPI.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (_epicRepository.GetEpicByID(id) is Epic epic)
             {
-                _epicRepository.DeleteEpic(epic);
-                return NoContent();
+
+                var completed = await Task.FromResult(_epicRepository.DeleteEpic(epic));
+                if (completed)
+                {
+                    return NoContent();
+                }
+                else { return BadRequest(); }
             }
             return NotFound();
         }
@@ -91,9 +101,10 @@ namespace YourEpic.WebAPI.Controllers
         // Should pass in the epicID for the path and the rating for the method.
         // POST: /api/epic/{epicID}/ratings
         [HttpPost("{epicID}/ratings")]
-        public IActionResult PostRating(int epicID, Rating rating)
+        public async Task<IActionResult> PostRating(int epicID, Rating rating)
         {
-            if (_ratingRepository.AddRatingForEpic(rating))
+            var completed = await Task.FromResult(_ratingRepository.AddRatingForEpic(rating));
+            if (completed)
             {
                 return Ok();
             }
