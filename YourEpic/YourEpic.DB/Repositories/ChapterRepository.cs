@@ -46,7 +46,6 @@ namespace YourEpic.DB.Repositories
 
         public bool DeleteChapter(Domain.Models.Chapter chapter)
         {
-
             var dbChapter = _context.Chapters.FirstOrDefault(c => c.Id == chapter.ID);
 
             //not really sure what remove does when chapter doesn't exist so 
@@ -88,7 +87,7 @@ namespace YourEpic.DB.Repositories
 
         public Domain.Models.Chapter GetChapterByID(int chapterID)
         {
-            throw new NotImplementedException();
+            return Mappers.ChapterMapper.Map(_context.Chapters.Where(e => e.Id == chapterID).FirstOrDefault());
         }
     }
 }

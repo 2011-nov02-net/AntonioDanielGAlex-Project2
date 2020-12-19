@@ -16,7 +16,6 @@ namespace YourEpic.DB.Repositories
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        
        
         /// <summary>
         /// categorizes epics
@@ -89,7 +88,5 @@ namespace YourEpic.DB.Repositories
             }
             return false;
         }
-
-
     }
 }

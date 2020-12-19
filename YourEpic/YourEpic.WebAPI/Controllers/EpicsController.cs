@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
+using YourEpic.WebAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -54,12 +55,14 @@ namespace YourEpic.WebAPI.Controllers
 
         // POST: api/epics/
         [HttpPost]
-        public async Task<IActionResult> AddEpic(Epic epic)
+        public async Task<IActionResult> AddEpic(EpicModel epicm)
         {
-            var completed = await Task.FromResult(_epicRepository.AddEpic(epic));
+
+            var completed = true;//await Task.FromResult(_epicRepository.AddEpic(epic));
             if (completed)
             {
-                return CreatedAtAction(nameof(GetEpicByID), new { id = epic.ID }, epic);
+                return Ok();
+                //return CreatedAtAction(nameof(GetEpicByID), new { id = epic.ID }, epic);
             }
             return BadRequest();
         }

@@ -32,19 +32,10 @@ namespace YourEpic.DB.Repositories
                 return false;
             }
 
-            dbUser = new User
-            {
-                Id = user.ID,
-                Name = user.Name,
-                Role = user.UserRole.ID,
-                Email = user.Email
-            };
-
-            _context.Users.Add(dbUser);
+            _context.Users.Add(Mappers.UserMapper.Map(user));
             _context.SaveChanges();
 
             return true;
-            
         }
 
         /// <summary>
@@ -67,6 +58,7 @@ namespace YourEpic.DB.Repositories
 
             return true;
         }
+
         /// <summary>
         /// Changes Name and Email of user in database.
         /// </summary>
