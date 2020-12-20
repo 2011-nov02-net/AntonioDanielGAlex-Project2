@@ -8,12 +8,12 @@ using YourEpic.Domain.Models;
 
 namespace YourEpic.DB.Repositories
 {
-    public class PublisherRepository : IPublisherRepository
+    public class ChapterRepository : IChapterRepository
     {
 
         private readonly YourEpicProjectTwoDatabaseContext _context;
 
-        public PublisherRepository(YourEpicProjectTwoDatabaseContext context)
+        public ChapterRepository(YourEpicProjectTwoDatabaseContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -21,7 +21,7 @@ namespace YourEpic.DB.Repositories
         public bool AddChapter(Domain.Models.Chapter chapter)
         {
             var dbEpic = _context.Epics
-                .FirstOrDefault(e => e.Id == chapter.ChapterEpic.ID);
+                .FirstOrDefault(e => e.Id == chapter.EpicID);
 
             //Epic does not exist in database return false
             if (dbEpic == null)
@@ -33,7 +33,7 @@ namespace YourEpic.DB.Repositories
             {
                 Id = chapter.ID,
                 Title = chapter.Title,
-                EpicId = chapter.ChapterEpic.ID,
+                EpicId = chapter.EpicID,
                 DateCreated = chapter.Date,
                 Text = chapter.Text
             };
@@ -44,25 +44,8 @@ namespace YourEpic.DB.Repositories
             return true;
         }
 
-        public bool AddEpic(Domain.Models.Epic epic)
-        {
-            var dbEpic = new Epic
-            {
-                Id = epic.ID,
-                Name = epic.Title,
-                WriterId = epic.Writer.ID,
-                DateCreated = epic.Date
-            };
-
-            _context.Epics.Add(dbEpic);
-            _context.SaveChanges();
-
-            return true;
-        }
-
         public bool DeleteChapter(Domain.Models.Chapter chapter)
         {
-
             var dbChapter = _context.Chapters.FirstOrDefault(c => c.Id == chapter.ID);
 
             //not really sure what remove does when chapter doesn't exist so 
@@ -76,26 +59,9 @@ namespace YourEpic.DB.Repositories
             _context.SaveChanges();
 
             return true;
-
         }
 
-        public bool DeleteEpic(Domain.Models.Epic epic)
-        {
-
-            var dbEpic = _context.Epics.FirstOrDefault(e => e.Id == epic.ID);
-
-            if (dbEpic == null)
-            {
-                return false;
-            }
-
-            _context.Epics.Remove(dbEpic);
-            _context.SaveChanges();
-
-            return true;
-        }
-
-        public bool EditChapter(Domain.Models.Chapter chapter)
+        public bool UpdateChapter(Domain.Models.Chapter chapter)
         {
             var dbChapter = _context.Chapters.FirstOrDefault(c => c.Id == chapter.ID);
 
@@ -112,6 +78,21 @@ namespace YourEpic.DB.Repositories
             _context.SaveChanges();
 
             return true;
+        }
+
+        public IEnumerable<Domain.Models.Chapter> GetChaptersByEpicID(int epicID)
+        {
+            return _context.Chapters.Include(e=>e.Epic).Where(e => e.EpicId == epicID).Select(Mappers.ChapterMapper.Map);
+        }
+
+        public Domain.Models.Chapter GetChapterByID(int chapterID)
+        {
+            var chapter = _context.Chapters.Include(e => e.Epic).Where(e => e.Id == chapterID).FirstOrDefault();
+
+            if (chapter != null) {
+                return Mappers.ChapterMapper.Map(chapter);
+            }
+            return null;
         }
     }
 }

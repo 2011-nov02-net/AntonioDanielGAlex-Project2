@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using YourEpic.Domain;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
+using YourEpic.WebAPI.Models;
 
 namespace YourEpic.WebAPI.Controllers
 {
@@ -26,11 +27,11 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET: api/users
         [HttpGet]
-        public ActionResult<IEnumerable<User>> Get()
+        public async Task<ActionResult<IEnumerable<UserModel>>> Get()
         {
-            if (_accountRepository.GetUsers() is IEnumerable<User>)
+            var m_user = await Task.FromResult(_accountRepository.GetUsers());
+            if ( m_user.Select(Mappers.UserModelMapper.Map) is IEnumerable<UserModel> users)
             {
-                IEnumerable<User> users = _accountRepository.GetUsers();
                 return Ok(users);
             }
             return NotFound();
@@ -39,9 +40,10 @@ namespace YourEpic.WebAPI.Controllers
 
         // POST: api/users
         [HttpPost]
-        public IActionResult Post(User user)
+        public async Task<IActionResult> Post(UserModel user)
         {
-            if (_accountRepository.CreateAccount(user))
+            var created = await Task.FromResult(_accountRepository.CreateAccount(Mappers.UserModelMapper.Map(user)));
+            if (created)
             {
                 return CreatedAtAction(nameof(Get), new { id = user.ID }, user);
             }
@@ -51,9 +53,10 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET: api/users/5
         [HttpGet("{id}")]
-        public ActionResult<User> Get(int id)
+        public async Task<ActionResult<UserModel>> Get(int id)
         {
-            if (_accountRepository.GetUserByID(id) is User user)
+            var d_user = await Task.FromResult(_accountRepository.GetUserByID(id));
+            if (Mappers.UserModelMapper.Map(d_user) is UserModel user)
             {
                 return Ok(user);
             }
@@ -64,12 +67,17 @@ namespace YourEpic.WebAPI.Controllers
 
         // PUT: api/users/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, User user)
+        public async Task<IActionResult> Put(int id, UserModel user)
         {
-
-            if (_accountRepository.GetUserByID(user.ID) is User)
+            if (_accountRepository.GetUserByID(user.ID) is User domain_user)
             {
-                _accountRepository.EditAccount(user);
+                var updated = await Task.FromResult(_accountRepository.EditAccount(domain_user));
+                if (updated)
+                {
+
+                    return Ok();
+                }
+                else { return BadRequest(); }
             }
 
             return NotFound();
@@ -78,12 +86,16 @@ namespace YourEpic.WebAPI.Controllers
 
         // DELETE: api/users/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (_accountRepository.GetUserByID(id) is User)
             {
-                _accountRepository.DeleteAccount(id);
-                return NoContent();
+                var deleted = await Task.FromResult(_accountRepository.DeleteAccount(id));
+                if (deleted)
+                {
+                    return NoContent();
+                }
+                else { return BadRequest(); }
             }
 
             return NotFound();
@@ -93,13 +105,13 @@ namespace YourEpic.WebAPI.Controllers
         // Need to pass in the user id for the route, and the user to call the function
         // GET: api/users/{id}/epics
         [HttpGet("{id}/epics")]
-        public ActionResult<IEnumerable<Epic>> GetUserEpics(int id, User user)
+        public async Task<ActionResult<IEnumerable<EpicModel>>> GetPublisherEpics(int id, UserModel user)
         {
-            if (_epicRepository.GetPublishersEpics(user) is IEnumerable<Epic>)
+            var d_epics = await Task.FromResult(_epicRepository.GetPublishersEpics(Mappers.UserModelMapper.Map(user)));
+            if (d_epics.Select(Mappers.EpicModelMapper.Map) is IEnumerable<EpicModel> epics)
             {
-                return Ok(_epicRepository.GetPublishersEpics(user).ToList());
+                return Ok(epics);
             }
-
 
             return NotFound();
         }

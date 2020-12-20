@@ -10,7 +10,7 @@ namespace YourEpic.Domain.Interfaces
 
         public bool DeleteComment(int commentID);
 
-        public IEnumerable<Comment> GetComments(int epicID);
+        public IEnumerable<Comment> GetCommentsForEpic(int epicID);
 
         /// <summary>
         /// Not sure about this one, dont know where we would display it is a response rather than a general comment
