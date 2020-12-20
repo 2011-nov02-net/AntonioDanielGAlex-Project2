@@ -40,9 +40,9 @@ namespace YourEpic.WebAPI.Controllers
         [HttpPost("epic/{epicID}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Post(int categoryID, int epicID)
+        public async Task<IActionResult> Post(IEnumerable<CategoryModel> categoriesToAdd, int epicID)
         {
-            var pass = await Task.FromResult(_categoryRepository.CategorizeEpic(categoryID, epicID));
+            var pass = await Task.FromResult(_categoryRepository.CategorizeEpic(categoriesToAdd.Select(Mappers.CategoryModelMapper.Map), epicID));
             if (pass)
             {
                 return Ok();

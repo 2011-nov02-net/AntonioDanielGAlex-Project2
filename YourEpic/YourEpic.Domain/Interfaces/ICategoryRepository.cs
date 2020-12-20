@@ -5,7 +5,7 @@ namespace YourEpic.Domain.Interfaces
 {
     public interface ICategoryRepository
     {
-        bool CategorizeEpic(int categoryID, int epicID);
+        bool CategorizeEpic(IEnumerable<Category> categoriesToAdd, int epicID);
 
         IEnumerable<Category> GetCategories(string name = null);
 
