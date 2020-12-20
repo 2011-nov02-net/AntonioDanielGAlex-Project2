@@ -53,6 +53,20 @@ namespace YourEpic.WebAPI
 
                 options.ReturnHttpNotAcceptable = true;
             });
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200",
+                                            "https://yourepic-api.azurewebsites.net")
+                            .AllowAnyMethod() // allow PUT & DELETE not just GET & POST
+                            .AllowAnyHeader()
+                            .AllowCredentials();
+                    });
+            });
+
             services.AddDbContext<YourEpicProjectTwoDatabaseContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("YourEpic")));
 
@@ -73,6 +87,8 @@ namespace YourEpic.WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 
