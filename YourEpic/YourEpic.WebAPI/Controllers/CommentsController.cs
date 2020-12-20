@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
+using YourEpic.WebAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,11 +26,12 @@ namespace YourEpic.WebAPI.Controllers
         // GET api/values/5
         [HttpGet("{epicID}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Comment>>> Get(int epicID)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<CommentModel>>> Get([FromRoute]int epicID)
         {
             var comments = await Task.FromResult(_commentRepository.GetCommentsForEpic(epicID));
-            
-            if (comments is IEnumerable<Comment> retrievedComments)
+
+            if (comments.Select(Mappers.CommentModelMapper.Map) is IEnumerable<CommentModel> retrievedComments)
             {
                 return Ok(retrievedComments);
             }
@@ -39,12 +41,13 @@ namespace YourEpic.WebAPI.Controllers
         // POST api/comments
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Post(Comment comment)
         {
             var pass = await Task.FromResult(_commentRepository.AddComment(comment));
             if (pass)
             {
-                return Ok();
+                return CreatedAtAction(nameof(Get), new { epicID = comment.CommentEpic.ID }, comment);
             }
             return BadRequest();
         }
@@ -52,12 +55,13 @@ namespace YourEpic.WebAPI.Controllers
         // POST api/comments
         [HttpPost("comment/{commentID}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Post(int commentID, Comment comment)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<IActionResult> Post([FromRoute]int commentID, Comment comment)
         {
             var pass = await Task.FromResult(_commentRepository.RespondToComment(commentID, comment));
             if (pass)
             {
-                return Ok();
+                return CreatedAtAction(nameof(Get), new { epicID = comment.CommentEpic.ID }, comment);
             }
             return BadRequest();
         }
@@ -66,7 +70,8 @@ namespace YourEpic.WebAPI.Controllers
         // DELETE api/comments/5
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(int id)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> Delete([FromRoute]int id)
         {
             var pass = await Task.FromResult(_commentRepository.DeleteComment(id));
             if (pass)

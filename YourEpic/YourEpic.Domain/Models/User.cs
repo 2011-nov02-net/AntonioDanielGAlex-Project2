@@ -61,7 +61,7 @@ namespace YourEpic.Domain.Models
             Epic epic;
             try
             {
-                epic = Epics.Where(e => e.RatingAverage == Epics.Max(e => e.RatingAverage)).FirstOrDefault();
+                epic = Epics.Where(e => e.GetAverageRating() == Epics.Max(e => e.GetAverageRating())).FirstOrDefault();
             }
             catch(InvalidOperationException)
             {

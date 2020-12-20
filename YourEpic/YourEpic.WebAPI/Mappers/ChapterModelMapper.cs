@@ -9,7 +9,8 @@ namespace YourEpic.WebAPI.Mappers
                 ID = chapter.ID,
                 Title = chapter.Title,
                 Date = chapter.Date,
-                Text = chapter.Text
+                Text = chapter.Text,
+                EpicID = chapter.EpicID
             };
         }
 
@@ -17,8 +18,9 @@ namespace YourEpic.WebAPI.Mappers
             return new Domain.Models.Chapter {
                 ID = model.ID,
                 Title = model.Title,
-                ChapterEpic = new Domain.Models.Epic {ID = model.EpicID},
-                Text = model.Text
+                EpicID = model.EpicID,
+                Text = model.Text,
+                Date = model.Date
             };
         }
     }

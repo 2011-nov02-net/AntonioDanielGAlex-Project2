@@ -11,17 +11,15 @@ namespace YourEpic.Domain.Models
         public string Concept { get; set; }
         public User Writer { get; set; }
         public DateTime Date { get; set; }
-        public IEnumerable<Chapter> Chapters { get; set; }
-        public int ChapterCount { get; set; }
-        public IEnumerable<Comment> Comments { get; set; }
-        public int CommentCount { get; set; }
-        public IEnumerable<Rating> Ratings { get; set; }
-        public double RatingAverage { get; set; }
-        public int TotalRatings { get; set; }
-        public IEnumerable<Category> Categories { get; set; }
+        public DateTime? DateCompleted { get; set; }
+        public IEnumerable<Chapter> Chapters { get; set; } = new List<Chapter>();
+        public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
+        public IEnumerable<Rating> Ratings { get; set; } = new List<Rating>();
+        public IEnumerable<Category> Categories { get; set; } = new List<Category>();
 
         public double GetAverageRating()
         {
+            if (Ratings.Count() == 0) { return 0; }
             return Ratings.Average(r => r.RatingNumber);
         }
 

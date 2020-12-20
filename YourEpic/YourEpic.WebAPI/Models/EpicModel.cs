@@ -11,6 +11,8 @@ namespace YourEpic.WebAPI.Models
         public string Concept { get; set; }
         public UserModel Author { get; set; }
         public DateTime Date { get; set; }
+        public DateTime? DateCompleted { get; set; }
+        public bool updateCompleted { get; set; } = false;
         public IEnumerable<CategoryModel> Categories { get; set; }
         public int ChapterCount { get; set; }
         public int CommentCount { get; set; }

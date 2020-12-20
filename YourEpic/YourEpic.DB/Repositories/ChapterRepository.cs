@@ -21,7 +21,7 @@ namespace YourEpic.DB.Repositories
         public bool AddChapter(Domain.Models.Chapter chapter)
         {
             var dbEpic = _context.Epics
-                .FirstOrDefault(e => e.Id == chapter.ChapterEpic.ID);
+                .FirstOrDefault(e => e.Id == chapter.EpicID);
 
             //Epic does not exist in database return false
             if (dbEpic == null)
@@ -33,7 +33,7 @@ namespace YourEpic.DB.Repositories
             {
                 Id = chapter.ID,
                 Title = chapter.Title,
-                EpicId = chapter.ChapterEpic.ID,
+                EpicId = chapter.EpicID,
                 DateCreated = chapter.Date,
                 Text = chapter.Text
             };
@@ -82,12 +82,17 @@ namespace YourEpic.DB.Repositories
 
         public IEnumerable<Domain.Models.Chapter> GetChaptersByEpicID(int epicID)
         {
-            return _context.Chapters.Where(e => e.EpicId == epicID).Select(Mappers.ChapterMapper.Map);
+            return _context.Chapters.Include(e=>e.Epic).Where(e => e.EpicId == epicID).Select(Mappers.ChapterMapper.Map);
         }
 
         public Domain.Models.Chapter GetChapterByID(int chapterID)
         {
-            return Mappers.ChapterMapper.Map(_context.Chapters.Where(e => e.Id == chapterID).FirstOrDefault());
+            var chapter = _context.Chapters.Include(e => e.Epic).Where(e => e.Id == chapterID).FirstOrDefault();
+
+            if (chapter != null) {
+                return Mappers.ChapterMapper.Map(chapter);
+            }
+            return null;
         }
     }
 }

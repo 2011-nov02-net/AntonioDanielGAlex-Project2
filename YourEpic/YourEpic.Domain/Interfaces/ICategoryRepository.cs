@@ -7,7 +7,7 @@ namespace YourEpic.Domain.Interfaces
     {
         bool CategorizeEpic(int categoryID, int epicID);
 
-        IEnumerable<Category> GetCategories();
+        IEnumerable<Category> GetCategories(string name = null);
 
         bool AddCategory(string name);
     }

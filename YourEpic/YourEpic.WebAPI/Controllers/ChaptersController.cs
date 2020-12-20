@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
+using YourEpic.WebAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,22 +26,25 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET: api/chapters/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Chapter>> GetById(int id)
+        public async Task<ActionResult<ChapterModel>> GetById([FromRoute] int id)
         {
             var m_chapter = await Task.FromResult(_chapterRepository.GetChapterByID(id));
-            if (m_chapter is Chapter chapter)
+            if (m_chapter != null)
             {
-                return Ok(chapter);
+                if (Mappers.ChapterModelMapper.Map(m_chapter) is ChapterModel chapter)
+                {
+                    return Ok(chapter);
+                }
             }
-
             return NotFound();
         }
 
         // POST: api/chapters
         [HttpPost]
-        public async Task<IActionResult> Post(Chapter chapter)
+        public async Task<IActionResult> Post(ChapterModel chapter)
         {
-            var completed = await Task.FromResult(_chapterRepository.AddChapter(chapter));
+            var domain_chapter = Mappers.ChapterModelMapper.Map(chapter);
+            var completed = await Task.FromResult(_chapterRepository.AddChapter(domain_chapter));
             if (completed)
             {
                 return CreatedAtAction(nameof(GetById), new { id = chapter.ID }, chapter);
@@ -50,13 +54,13 @@ namespace YourEpic.WebAPI.Controllers
         }
 
         // PUT: api/chapters/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int chapterID, [FromBody] Chapter newChapter)
+        [HttpPut("{chapterID}")]
+        public async Task<IActionResult> Put([FromRoute] int chapterID, [FromBody] ChapterModel newChapter)
         {
-
+            var domain_chapter = Mappers.ChapterModelMapper.Map(newChapter);
             if (_chapterRepository.GetChaptersByEpicID(chapterID) is Chapter)
             {
-                var completed = await Task.FromResult(_chapterRepository.UpdateChapter(newChapter));
+                var completed = await Task.FromResult(_chapterRepository.UpdateChapter(domain_chapter));
                 if (completed)
                 {
                     return NoContent();
@@ -70,10 +74,10 @@ namespace YourEpic.WebAPI.Controllers
 
         // DELETE: api/chapters/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Chapter chapter)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             // Check 
-            if (_chapterRepository.GetChapterByID(chapter.ID) is Chapter)
+            if (_chapterRepository.GetChapterByID(id) is Chapter chapter)
             {
                 var completed = await Task.FromResult(_chapterRepository.DeleteChapter(chapter));
                 if (completed)

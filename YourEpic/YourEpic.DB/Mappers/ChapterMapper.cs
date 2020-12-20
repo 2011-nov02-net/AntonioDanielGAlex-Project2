@@ -13,7 +13,8 @@ namespace YourEpic.DB.Mappers
                 ID=entity.Id,
                 Date = (DateTime)entity.DateCreated,
                 Title = entity.Title,
-                Text = entity.Text
+                Text = entity.Text,
+                EpicID = entity.EpicId
             };
         }
 
@@ -24,7 +25,8 @@ namespace YourEpic.DB.Mappers
                 Id = model.ID,
                 DateCreated = model.Date,
                 Text = model.Text,
-                Title = model.Title
+                Title = model.Title,
+                EpicId = model.EpicID
             };
         }
     }
