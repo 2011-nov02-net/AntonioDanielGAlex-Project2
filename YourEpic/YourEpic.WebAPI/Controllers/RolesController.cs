@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
+using YourEpic.WebAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,15 +24,15 @@ namespace YourEpic.WebAPI.Controllers
         }
     
         // GET: api/roles
-        [HttpGet("{roles}")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Role>>> Get()
+        public async Task<ActionResult<IEnumerable<RoleModel>>> Get()
         {
-            var roles = Task.FromResult(_rolesRepository.GetRoles());
-            if (roles is IEnumerable<Role>)
+            var roles = await Task.FromResult(_rolesRepository.GetRoles());
+            if (roles.Select(Mappers.RoleModelMapper.Map) is IEnumerable<RoleModel> modelRoles)
             {
-                return Ok(roles);
+                return Ok(modelRoles);
             }
             return NotFound();
         }

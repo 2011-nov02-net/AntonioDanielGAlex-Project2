@@ -13,7 +13,9 @@ namespace YourEpic.DB.Mappers
             {
                 ID = entity.Id,
                 Title = entity.Name,
-                Date = (DateTime)entity.DateCreated
+                Date = (DateTime)entity.DateCreated,
+                Concept = entity.Concept,
+                DateCompleted = entity.DateCompleted ?? DateTime.MinValue
             };
         }
         public static Epic Map(Domain.Models.Epic model)
@@ -23,7 +25,9 @@ namespace YourEpic.DB.Mappers
                 Id = model.ID,
                 DateCreated = model.Date,
                 Name = model.Title,
-                WriterId = model.Writer.ID
+                WriterId = model.Writer.ID,
+                DateCompleted = model.DateCompleted,
+                Concept = model.Concept
             };
         }
 
@@ -45,6 +49,35 @@ namespace YourEpic.DB.Mappers
                 Title = entity.Name,
                 Date = (DateTime)entity.DateCreated,
                 Writer = UserMapper.Map(entity.Writer)
+            };
+        }
+        public static Domain.Models.Epic MapWithCategoryAndWriter(Epic entity)
+        {
+            return new Domain.Models.Epic
+            {
+                ID = entity.Id,
+                Title = entity.Name,
+                Date = (DateTime)entity.DateCreated,
+                Concept = entity.Concept,
+                Writer = UserMapper.Map(entity.Writer),
+                Categories = entity.EpicCategories.Select(c => CategoryMapper.Map(c.Category))
+            };
+        }
+
+        public static Domain.Models.Epic MapFull(Epic entity)
+        {
+            return new Domain.Models.Epic
+            {
+                ID = entity.Id,
+                Title = entity.Name,
+                Date = (DateTime)entity.DateCreated,
+                Concept = entity.Concept,
+                DateCompleted = entity.DateCompleted ?? DateTime.MinValue,
+                Writer = UserMapper.Map(entity.Writer),
+                Categories = entity.EpicCategories.Select(c => CategoryMapper.Map(c.Category)),
+                Ratings = entity.Ratings.Select(RatingMapper.Map),
+                Comments = entity.Comments.Select(CommentMapper.Map),
+                Chapters = entity.Chapters.Select(ChapterMapper.Map)
             };
         }
     }

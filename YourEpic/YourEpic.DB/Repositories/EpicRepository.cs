@@ -21,73 +21,130 @@ namespace YourEpic.DB.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public IEnumerable<Domain.Models.Epic> GetAllEpics(string category = null)
+        public IEnumerable<Domain.Models.Epic> GetAllEpics(string title = null, string category = null)
         {
-            IQueryable<Epic> items = _context.Epics
-                   .Include(c => c.EpicCategories);
+            IQueryable<Epic> items = _context.Epics.Include(w => w.Writer)
+                   .Include(c => c.EpicCategories).ThenInclude(c => c.Category)
+                   .Include(ch => ch.Chapters)
+                   .Include(r => r.Ratings)
+                   .Include(co => co.Comments);
 
             if (category != null)
             {
-                items = items.Where(e=>e.EpicCategories.Any(c=>c.Category.Name == category));
+                items = items.Where(e => e.EpicCategories.Any(c => c.Category.Name == category));
             }
+            if (title != null)
+            {
+                items = items.Where(e => e.Name == title);
+            }
+            var m_epics = items.Select(Mappers.EpicMapper.MapFull);
 
-            return _context.Epics.Select(Mappers.EpicMapper.Map);
-        }
-
-        public Domain.Models.Chapter GetChapter(int chapterID)
-        {
-            return Mappers.ChapterMapper.Map(_context.Chapters.First(c => c.Id == chapterID));
-        }
-
-        public IEnumerable<Domain.Models.Chapter> GetChapters(int epicID)
-        {
-            return _context.Chapters.Where(e => e.EpicId == epicID).Select(Mappers.ChapterMapper.Map);
+            return m_epics;
         }
 
         public Domain.Models.Epic GetEpicByID(int id)
         {
-            return Mappers.EpicMapper.Map(_context.Epics.First(e => e.Id == id));
+            IQueryable<Epic> items = _context.Epics.Include(w => w.Writer)
+                      .Include(c => c.EpicCategories).ThenInclude(c => c.Category)
+                      .Include(ch => ch.Chapters)
+                      .Include(r => r.Ratings)
+                      .Include(co => co.Comments);
+
+            return Mappers.EpicMapper.MapFull(items.First(e => e.Id == id));
         }
 
         public Domain.Models.Epic GetFeaturedEpic()
         {
-            return Mappers.EpicMapper.MapWithWriter(_context.Epics.Include(w=>w.Writer).OrderByDescending(e => e.DateCompleted).First());
+            IQueryable<Epic> items = _context.Epics.Include(w => w.Writer)
+                      .Include(c => c.EpicCategories).ThenInclude(c => c.Category)
+                      .Include(ch => ch.Chapters)
+                      .Include(r => r.Ratings)
+                      .Include(co => co.Comments);
+
+            return Mappers.EpicMapper.MapFull(items.OrderByDescending(e => e.DateCompleted).First());
         }
 
         public Domain.Models.Epic GetHighestRatedEpic()
         {
-            var db_epics = _context.Epics.Select(Mappers.EpicMapper.MapWithRatings);
-            var highestRatedEpic = new Domain.Models.Epic();
-            double highestRating = 0;
+            var highestRatedEpic = _context.Ratings.GroupBy(r => new { ID = r.EpicId }).Select(r => new { Average = r.Average(p => p.Rating1), ID = r.Key.ID }).OrderByDescending(r => r.Average).First();
 
-            foreach (var epic in db_epics)
-            {
-                if (epic.AverageRating > highestRating)
-                {
-                    highestRatedEpic = epic;
-                    highestRating = epic.AverageRating;
-                }
-            }
+            int epicID = highestRatedEpic.ID;
 
-            return highestRatedEpic;
+            IQueryable<Epic> items = _context.Epics.Include(w => w.Writer)
+                      .Include(c => c.EpicCategories).ThenInclude(c => c.Category)
+                      .Include(ch => ch.Chapters)
+                      .Include(r => r.Ratings)
+                      .Include(co => co.Comments);
+
+            var db_epic = items.First(e => e.Id == epicID);
+
+            return Mappers.EpicMapper.MapFull(db_epic);
         }
 
         public IEnumerable<Domain.Models.Epic> GetPublishersEpics(Domain.Models.User user)
         {
-            return _context.Epics.Include(w => w.Writer).Select(Mappers.EpicMapper.MapWithWriter).Where(e => e.Writer.ID == user.ID);
+            return _context.Epics.Include(w => w.Writer)
+                      .Include(c => c.EpicCategories).ThenInclude(c => c.Category)
+                      .Include(ch => ch.Chapters)
+                      .Include(r => r.Ratings)
+                      .Include(co => co.Comments)
+                      .Select(Mappers.EpicMapper.MapWithWriter)
+                      .Where(e => e.Writer.ID == user.ID);
         }
 
-        public bool UpdateEpicTitle(Domain.Models.Epic epic)
+        public bool UpdateEpic(Domain.Models.Epic epic)
         {
             try
             {
-                var db_epic = Mappers.EpicMapper.Map(epic);
-
-                _context.Add(db_epic);
+                var db_epic = _context.Epics.First(e=>e.Id == epic.ID);
+                db_epic.DateCompleted = epic.DateCompleted;
+                db_epic.Name = epic.Title;
                 _context.SaveChanges();
                 return true;
             }
             catch { return false; }
+        }
+
+        public bool AddEpic(Domain.Models.Epic epic)
+        {
+            var dbEpic = Mappers.EpicMapper.Map(epic);
+            _context.Epics.Add(dbEpic);
+            _context.SaveChanges();
+
+            return true;
+        }
+
+        public bool DeleteEpic(Domain.Models.Epic epic)
+        {
+            var dbEpic = _context.Epics.FirstOrDefault(e => e.Id == epic.ID);
+
+            if (dbEpic == null)
+            {
+                return false;
+            }
+
+            _context.Epics.Remove(dbEpic);
+            _context.SaveChanges();
+
+            return true;
+        }
+
+        public IEnumerable<Domain.Models.Epic> GetEpicsSubscribedTo(int subscriberID)
+        {
+            var subscriptions = _context.Subscriptions.Include(w => w.Writer).Include(s => s.Subscriber).Where(s => s.SubscriberId == subscriberID);
+
+            var m_subscriptions = subscriptions.Select(Mappers.SubscriptionMapper.Map);
+
+            var m_ids = m_subscriptions.Select(s => s.Publisher.ID);
+
+            var db_epics = _context.Epics.Include(w => w.Writer)
+                      .Include(c => c.EpicCategories).ThenInclude(c => c.Category)
+                      .Include(ch => ch.Chapters)
+                      .Include(r => r.Ratings)
+                      .Include(co => co.Comments)
+                      .Where(e => m_ids.Contains(e.WriterId));
+
+            return db_epics.Select(Mappers.EpicMapper.MapFull);
         }
     }
 }

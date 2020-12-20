@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
+using YourEpic.WebAPI.Models;
 
 namespace YourEpic.WebAPI.Controllers
 {
@@ -23,13 +24,11 @@ namespace YourEpic.WebAPI.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Rating>> Get(int id)
+        public async Task<ActionResult<RatingModel>> Get(int id)
         {
-            // Might want to make this return an api model in the future. dont want to add
-            //    too much in one PR.... but it would be beneficial to change.
             var rating = await Task.FromResult(_ratingRepository.GetRatingByID(id));
-            if (rating is Rating) {
-                return Ok(rating);
+            if (Mappers.RatingModelMapper.Map(rating) is RatingModel ratingModel) {
+                return Ok(ratingModel);
             }
             return NotFound();
         }
@@ -38,9 +37,10 @@ namespace YourEpic.WebAPI.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Put(Rating rating)
+        public async Task<IActionResult> Put(RatingModel rating)
         {
-            var pass = await Task.FromResult(_ratingRepository.UpdateRatingForEpic(rating));
+            var domain_rating = Mappers.RatingModelMapper.Map(rating);
+            var pass = await Task.FromResult(_ratingRepository.UpdateRatingForEpic(domain_rating));
             if (pass == true) 
             {
                 return NoContent();
@@ -53,9 +53,9 @@ namespace YourEpic.WebAPI.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Delete(Rating rating)
+        public async Task<IActionResult> Delete(RatingModel rating)
         {
-            var pass = await Task.FromResult(_ratingRepository.RemoveRatingForEpic(rating));
+            var pass = await Task.FromResult(_ratingRepository.RemoveRatingForEpic(Mappers.RatingModelMapper.Map(rating)));
             if (pass == true) 
             {
                 return NoContent();

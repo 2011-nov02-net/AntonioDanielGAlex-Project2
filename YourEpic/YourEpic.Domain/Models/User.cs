@@ -12,7 +12,7 @@ namespace YourEpic.Domain.Models
         public string Password { get; set; }
         public Role UserRole { get; set; }
         public IEnumerable<Epic> Epics { get; set; }
-        public int EpicCount => Epics.Count();
+        public int EpicCount { get; set; }
 
         public IEnumerable<Subscription> MySubscriptions { get; set; }
 
@@ -61,7 +61,7 @@ namespace YourEpic.Domain.Models
             Epic epic;
             try
             {
-                epic = Epics.Where(e => e.AverageRating == Epics.Max(e => e.AverageRating)).FirstOrDefault();
+                epic = Epics.Where(e => e.GetAverageRating() == Epics.Max(e => e.GetAverageRating())).FirstOrDefault();
             }
             catch(InvalidOperationException)
             {

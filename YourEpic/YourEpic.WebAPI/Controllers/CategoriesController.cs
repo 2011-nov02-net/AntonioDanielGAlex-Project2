@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
+using YourEpic.WebAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,17 +20,15 @@ namespace YourEpic.WebAPI.Controllers
 
         public CategoriesController(ICategoryRepository categoryRepository)
         {
-            categoryRepository = _categoryRepository;
+            _categoryRepository = categoryRepository;
         }
-
 
         // GET: api/categories
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Category>>> Get()
+        public async Task<ActionResult<IEnumerable<CategoryModel>>> Get([FromQuery]string name = null)
         {
-            var categories = await Task.FromResult(_categoryRepository.GetCategories());
-            if (categories is IEnumerable<Category> retrievedCats)
+            var categories = await Task.FromResult(_categoryRepository.GetCategories(name));
+            if (categories.Select(Mappers.CategoryModelMapper.Map) is IEnumerable<CategoryModel> retrievedCats)
             {
                 return Ok(retrievedCats);
             }
@@ -37,14 +36,14 @@ namespace YourEpic.WebAPI.Controllers
             return NotFound();
         }
 
-
         // POST: api/categories/epic/{epicID}
         [HttpPost("epic/{epicID}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Post(int categoryID, int epicID)
         {
             var pass = await Task.FromResult(_categoryRepository.CategorizeEpic(categoryID, epicID));
-            if (pass == true)
+            if (pass)
             {
                 return Ok();
             }
@@ -54,16 +53,17 @@ namespace YourEpic.WebAPI.Controllers
         // POST: api/categories
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> NewCategory(Category category)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> NewCategory(CategoryModel category)
         {
-            var pass = await Task.FromResult(_categoryRepository.AddCategory(category.Name));
-            if (pass == true)
+            var domain_category = Mappers.CategoryModelMapper.Map(category);
+            var pass = await Task.FromResult(_categoryRepository.AddCategory(domain_category.Name));
+            if (pass)
             {
                 return Ok();
             }
 
             return BadRequest();
         }
-
     }
 }

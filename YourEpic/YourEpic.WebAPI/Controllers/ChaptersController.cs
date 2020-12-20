@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
+using YourEpic.WebAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,64 +15,78 @@ namespace YourEpic.WebAPI.Controllers
     [ApiController]
     public class ChaptersController : ControllerBase
     {
-        private readonly IPublisherRepository _publisherRepository;
+        private readonly IChapterRepository _chapterRepository;
         private readonly IEpicRepository _epicRepository;
 
-        public ChaptersController(IPublisherRepository publisherRepository, IEpicRepository epicRepository)
+        public ChaptersController(IChapterRepository chapterRepository, IEpicRepository epicRepository)
         {
-            _publisherRepository = publisherRepository;
+            _chapterRepository = chapterRepository;
             _epicRepository = epicRepository;
         }
 
         // GET: api/chapters/{id}
         [HttpGet("{id}")]
-        public ActionResult<Chapter> GetById(int id)
+        public async Task<ActionResult<ChapterModel>> GetById([FromRoute] int id)
         {
-            if (_epicRepository.GetChapter(id) is Chapter chapter)
+            var m_chapter = await Task.FromResult(_chapterRepository.GetChapterByID(id));
+            if (m_chapter != null)
             {
-                return Ok(chapter);
+                if (Mappers.ChapterModelMapper.Map(m_chapter) is ChapterModel chapter)
+                {
+                    return Ok(chapter);
+                }
             }
             return NotFound();
         }
 
         // POST: api/chapters
         [HttpPost]
-        public IActionResult Post(Chapter chapter)
+        public async Task<IActionResult> Post(ChapterModel chapter)
         {
-            if (_publisherRepository.AddChapter(chapter))
+            var domain_chapter = Mappers.ChapterModelMapper.Map(chapter);
+            var completed = await Task.FromResult(_chapterRepository.AddChapter(domain_chapter));
+            if (completed)
             {
                 return CreatedAtAction(nameof(GetById), new { id = chapter.ID }, chapter);
             }
+
             return BadRequest();
         }
 
-
         // PUT: api/chapters/{id}
-        [HttpPut("{id}")]
-        public IActionResult Put(int chapterID, [FromBody] Chapter newChapter)
+        [HttpPut("{chapterID}")]
+        public async Task<IActionResult> Put([FromRoute] int chapterID, [FromBody] ChapterModel newChapter)
         {
-            if(_epicRepository.GetChapter(chapterID) is Chapter)
+            var domain_chapter = Mappers.ChapterModelMapper.Map(newChapter);
+            if (_chapterRepository.GetChaptersByEpicID(chapterID) is Chapter)
             {
-                _publisherRepository.EditChapter(newChapter);
-
-                return NoContent();
+                var completed = await Task.FromResult(_chapterRepository.UpdateChapter(domain_chapter));
+                if (completed)
+                {
+                    return NoContent();
+                }
+                else
+                { return BadRequest(); }
             }
-
 
             return NotFound();
         }
 
         // DELETE: api/chapters/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(Chapter chapter)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             // Check 
-            if (_epicRepository.GetChapter(chapter.ID) is Chapter)
+            if (_chapterRepository.GetChapterByID(id) is Chapter chapter)
             {
-                _publisherRepository.EditChapter(chapter);
-
-                return NoContent();
+                var completed = await Task.FromResult(_chapterRepository.DeleteChapter(chapter));
+                if (completed)
+                {
+                    return NoContent();
+                }
+                else { return BadRequest(); }
             }
+
             return NotFound();
         }
     }

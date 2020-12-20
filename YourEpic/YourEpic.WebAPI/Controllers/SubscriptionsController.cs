@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
+using YourEpic.WebAPI.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,19 +17,18 @@ namespace YourEpic.WebAPI.Controllers
     {
 
         private readonly ISubscriptionRepository _subscriptionRepository;
-        private readonly IReaderRepository _readerRepository;
 
-        public SubscriptionsController(ISubscriptionRepository subscriptionRepository, IReaderRepository readerRepository)
+        public SubscriptionsController(ISubscriptionRepository subscriptionRepository)
         {
             _subscriptionRepository = subscriptionRepository;
-            _readerRepository = readerRepository;
         }
 
         // GET api/<SubscriptionsController>/5
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            if (_readerRepository.GetEpicsSubscribedTo(id) is IEnumerable<Epic> subscriptions)
+            var result = await Task.FromResult(_subscriptionRepository.GetMySubscriptions(id));
+            if (result.Select(Mappers.SubscriptionModelMapper.Map) is IEnumerable<SubscriptionModel> subscriptions)
             {
                 return Ok(subscriptions);
             }
@@ -37,9 +37,10 @@ namespace YourEpic.WebAPI.Controllers
 
         [HttpPost("{publisherID}/subscribee/{subscriber}")]
 
-        public IActionResult Post(int subscriber, int publisherID)
+        public async Task<IActionResult> Post(int subscriber, int publisherID)
         {
-            if (_subscriptionRepository.SubscribeToPublisher(subscriber, publisherID))
+            var created = await Task.FromResult(_subscriptionRepository.SubscribeToPublisher(subscriber, publisherID));
+            if (created)
             {
                 return Ok();
             }
@@ -47,9 +48,10 @@ namespace YourEpic.WebAPI.Controllers
         }
 
         [HttpDelete("{publisherID}/subscribee/{subscriber}")]
-        public IActionResult Delete(int subscriber, int publisherID)
+        public async Task<IActionResult> Delete(int subscriber, int publisherID)
         {
-            if (_subscriptionRepository.UnsubscribeFromPublisher(subscriber, publisherID))
+            var deleted = await Task.FromResult(_subscriptionRepository.UnsubscribeFromPublisher(subscriber, publisherID));
+            if (deleted)
             {
                 return Ok();
             }

@@ -16,7 +16,6 @@ namespace YourEpic.DB.Repositories
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        
        
         /// <summary>
         /// categorizes epics
@@ -50,22 +49,16 @@ namespace YourEpic.DB.Repositories
         /// Gets all categories from database
         /// </summary>
         /// <returns>List of categories or empty list no categories in database</returns>
-        public IEnumerable<Domain.Models.Category> GetCategories()
+        public IEnumerable<Domain.Models.Category> GetCategories(string name = null)
         {
-            var dbCategories = _context.Categories.ToList();
+            IQueryable<Category> items = _context.Categories;
 
-            if (dbCategories.Any())
+            if (name != null)
             {
-                return new List<Domain.Models.Category>();
+                items = items.Where(e => e.Name == name);
             }
 
-            var categories = dbCategories.Select(c => new Domain.Models.Category
-            {
-                ID = c.Id,
-                Name = c.Name
-            });
-
-            return categories;
+            return items.Select(Mappers.CategoryMapper.Map);
         }
 
         /// <summary>
@@ -89,7 +82,5 @@ namespace YourEpic.DB.Repositories
             }
             return false;
         }
-
-
     }
 }

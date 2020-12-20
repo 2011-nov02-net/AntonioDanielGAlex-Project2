@@ -64,7 +64,7 @@ namespace YourEpic.DB.Repositories
         /// </summary>
         /// <param name="epicID">Target epic id</param>
         /// <returns>All comments of an epic or empty list if epic has no comments yet</returns>
-        public IEnumerable<Domain.Models.Comment> GetComments(int epicID)
+        public IEnumerable<Domain.Models.Comment> GetCommentsForEpic(int epicID)
         {
             var dbComments = _context.Comments
                 .Include(c => c.Commenter)
@@ -122,6 +122,5 @@ namespace YourEpic.DB.Repositories
 
             return true;
         }
-
     }
 }

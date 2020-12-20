@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using YourEpic.Domain.Interfaces;
 
 namespace YourEpic.DB.Repositories
 {
-    public class SubscriptionRepository: ISubscriptionRepository
+    public class SubscriptionRepository : ISubscriptionRepository
     {
         private readonly YourEpicProjectTwoDatabaseContext _context;
 
@@ -14,9 +16,9 @@ namespace YourEpic.DB.Repositories
             _context = context;
         }
 
-        public IEnumerable<Domain.Models.Epic> GetMySubscriptions(int id)
+        public IEnumerable<Domain.Models.Subscription> GetMySubscriptions(int userID)
         {
-            throw new NotImplementedException();
+            return _context.Subscriptions.Include(s=>s.Subscriber).Include(w=>w.Writer).Select(Mappers.SubscriptionMapper.Map).Where(s => s.Subscriber.ID==userID);
         }
 
         public bool SubscribeToPublisher(int subscriberID, int publisherID)
@@ -33,7 +35,7 @@ namespace YourEpic.DB.Repositories
         public bool UnsubscribeFromPublisher(int subscriberID, int publisherID)
         {
             var deleteSubscription = _context.Subscriptions.Find(publisherID, subscriberID);
-            
+
             _context.Subscriptions.Remove(deleteSubscription);
 
             return true;
