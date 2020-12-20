@@ -75,6 +75,7 @@ namespace YourEpic.DB.Repositories
                       .Include(ch => ch.Chapters)
                       .Include(r => r.Ratings)
                       .Include(co => co.Comments);
+
             var db_epic = items.First(e => e.Id == epicID);
 
             return Mappers.EpicMapper.MapFull(db_epic);

@@ -26,11 +26,9 @@ namespace YourEpic.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<RatingModel>> Get(int id)
         {
-            // Might want to make this return an api model in the future. dont want to add
-            //    too much in one PR.... but it would be beneficial to change.
             var rating = await Task.FromResult(_ratingRepository.GetRatingByID(id));
-            if (Mappers.RatingModelMapper.Map(rating) is RatingModel) {
-                return Ok(rating);
+            if (Mappers.RatingModelMapper.Map(rating) is RatingModel ratingModel) {
+                return Ok(ratingModel);
             }
             return NotFound();
         }

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
@@ -23,8 +25,8 @@ namespace YourEpic.DB.Repositories
         public Domain.Models.Rating GetRatingByID(int ratingID) {
             Domain.Models.Rating nonDB_rating;
             try {
-                var db_rating = _context.Ratings.Find(ratingID);
-                nonDB_rating = new Domain.Models.Rating { ID = db_rating.Id, RatingNumber = db_rating.Rating1};
+                var db_rating = _context.Ratings.Include(w=>w.Rater).Include(e=>e.Epic).First(r=>r.Id == ratingID);
+                nonDB_rating = Mappers.RatingMapper.MapFull(db_rating);
             }
             catch {
                 return null;
