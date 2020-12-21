@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET api/<SubscriptionsController>/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> Get(int id)
         {
             var result = await Task.FromResult(_subscriptionRepository.GetMySubscriptions(id));
@@ -36,7 +38,7 @@ namespace YourEpic.WebAPI.Controllers
         }
 
         [HttpPost("{publisherID}/subscribee/{subscriber}")]
-
+        [Authorize]
         public async Task<IActionResult> Post(int subscriber, int publisherID)
         {
             var created = await Task.FromResult(_subscriptionRepository.SubscribeToPublisher(subscriber, publisherID));
@@ -48,6 +50,7 @@ namespace YourEpic.WebAPI.Controllers
         }
 
         [HttpDelete("{publisherID}/subscribee/{subscriber}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int subscriber, int publisherID)
         {
             var deleted = await Task.FromResult(_subscriptionRepository.UnsubscribeFromPublisher(subscriber, publisherID));

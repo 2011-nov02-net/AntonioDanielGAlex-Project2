@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
@@ -28,6 +29,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET: api/epics
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<EpicModel>>> Get([FromQuery] string title = null, [FromQuery] string category = null)
         {
             var domain_epics = await Task.FromResult(_epicRepository.GetAllEpics(title, category));
@@ -41,6 +43,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET: api/epics/{id}
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<EpicModel>> GetEpicByID([FromRoute] int id)
         {
             var m_epic = await Task.FromResult(_epicRepository.GetEpicByID(id));
@@ -56,6 +59,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // POST: api/epics/
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddEpic([FromBody] EpicModel epic)
         {
             var domain_epic = Mappers.EpicModelMapper.Map(epic);
@@ -72,6 +76,7 @@ namespace YourEpic.WebAPI.Controllers
         // Here id is the epicID you want to look at/read
         // GET api/epic/{id}/chapters
         [HttpGet("{id}/chapters")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<ChapterModel>>> GetChaptersForEpic(int id)
         {
             var m_chapters = await Task.FromResult(_chapterRepository.GetChaptersByEpicID(id));
@@ -86,6 +91,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             if (_epicRepository.GetEpicByID(id) is Epic epic)
@@ -104,6 +110,7 @@ namespace YourEpic.WebAPI.Controllers
         // Should pass in the epicID for the path and the rating for the method.
         // POST: /api/epic/{epicID}/ratings
         [HttpPost("{epicID}/ratings")]
+        [Authorize]
         public async Task<IActionResult> PostRating(int epicID, RatingModel rating)
         {
             var epic = await Task.FromResult(_epicRepository.GetEpicByID(epicID));
@@ -125,6 +132,7 @@ namespace YourEpic.WebAPI.Controllers
         }
 
         [HttpGet("featured")]
+        [Authorize]
         public async Task<ActionResult<EpicModel>> GetFeatured()
         {
             var domain_epic = await Task.FromResult(_epicRepository.GetFeaturedEpic());
@@ -137,6 +145,7 @@ namespace YourEpic.WebAPI.Controllers
         }
 
         [HttpGet("highestrated")]
+        [Authorize]
         public async Task<ActionResult<EpicModel>> GetHighestRated()
         {
             var domain_epic = await Task.FromResult(_epicRepository.GetHighestRatedEpic());
@@ -149,6 +158,7 @@ namespace YourEpic.WebAPI.Controllers
         }
 
         [HttpPut("{epicID}")]
+        [Authorize]
         public async Task<IActionResult> Put([FromRoute] int epicID, [FromBody] EpicModel epicModel)
         {
             var check_epic = await Task.FromResult(_epicRepository.GetEpicByID(epicID));
