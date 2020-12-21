@@ -16,29 +16,46 @@ namespace YourEpic.DB.Repositories
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-       
+
         /// <summary>
         /// categorizes epics
         /// </summary>
         /// <param name="categoryID">Category Id</param>
         /// <param name="epicID">Epic Id</param>
         /// <returns>False if epic is already categorized or true if epic categorized successfully</returns>
-        public bool CategorizeEpic(int categoryID, int epicID)
+        public bool CategorizeEpic(IEnumerable<Domain.Models.Category> categoriesToAdd, int epicID)
         {
-            var dbEpicCatergory = _context.EpicCategories.FirstOrDefault(ec => ec.CategoryId == categoryID && ec.EpicId == epicID);
-
+            var dbEpicCatergory = _context.EpicCategories;
             if (dbEpicCatergory != null)
+            {
+                foreach (var category in categoriesToAdd)
+                {
+                    foreach (var exists in dbEpicCatergory.Where(e=>e.EpicId == epicID))
+                    {
+                        if (category.ID == exists.CategoryId)
+                        {
+                            categoriesToAdd.ToList().Remove(category);
+                        }
+                    }
+                }
+            }
+            if (categoriesToAdd.Count() == 0)
             {
                 return false;
             }
 
-            dbEpicCatergory = new EpicCategory
+            foreach (var cat in categoriesToAdd)
             {
-                EpicId = epicID,
-                CategoryId = categoryID
-            };
 
-            _context.EpicCategories.Add(dbEpicCatergory);
+                var epicCategory = new EpicCategory
+                {
+                    EpicId = epicID,
+                    CategoryId = cat.ID
+                };
+
+                dbEpicCatergory.Add(epicCategory);
+            }
+
             _context.SaveChanges();
 
             return true;

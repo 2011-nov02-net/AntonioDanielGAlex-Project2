@@ -27,7 +27,7 @@ namespace YourEpic.WebAPI.Controllers
         [HttpGet("{epicID}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<CommentModel>>> Get([FromRoute]int epicID)
+        public async Task<ActionResult<IEnumerable<CommentModel>>> Get([FromRoute] int epicID)
         {
             var comments = await Task.FromResult(_commentRepository.GetCommentsForEpic(epicID));
 
@@ -42,12 +42,16 @@ namespace YourEpic.WebAPI.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> Post(Comment comment)
+        public async Task<IActionResult> Post(CommentModel comment)
         {
-            var pass = await Task.FromResult(_commentRepository.AddComment(comment));
-            if (pass)
+            if (Mappers.CommentModelMapper.Map(comment) is Comment newComment)
             {
-                return CreatedAtAction(nameof(Get), new { epicID = comment.CommentEpic.ID }, comment);
+                var pass = await Task.FromResult(_commentRepository.AddComment(newComment));
+                if (pass)
+                {
+                    return CreatedAtAction(nameof(Get), new { epicID = newComment.CommentEpic.ID }, comment);
+                }
+                return NotFound();
             }
             return BadRequest();
         }
@@ -56,12 +60,16 @@ namespace YourEpic.WebAPI.Controllers
         [HttpPost("comment/{commentID}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> Post([FromRoute]int commentID, Comment comment)
+        public async Task<IActionResult> Post([FromRoute] int commentID, CommentModel comment)
         {
-            var pass = await Task.FromResult(_commentRepository.RespondToComment(commentID, comment));
-            if (pass)
+            if (Mappers.CommentModelMapper.Map(comment) is Comment newComment)
             {
-                return CreatedAtAction(nameof(Get), new { epicID = comment.CommentEpic.ID }, comment);
+                var pass = await Task.FromResult(_commentRepository.RespondToComment(commentID, newComment));
+                if (pass)
+                {
+                    return CreatedAtAction(nameof(Get), new { epicID = newComment.CommentEpic.ID }, comment);
+                }
+                return NotFound();
             }
             return BadRequest();
         }
@@ -71,7 +79,7 @@ namespace YourEpic.WebAPI.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Delete([FromRoute]int id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var pass = await Task.FromResult(_commentRepository.DeleteComment(id));
             if (pass)
