@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YourEpic.Domain.Interfaces;
@@ -25,6 +26,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET: api/categories
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<CategoryModel>>> Get([FromQuery]string name = null)
         {
             var categories = await Task.FromResult(_categoryRepository.GetCategories(name));

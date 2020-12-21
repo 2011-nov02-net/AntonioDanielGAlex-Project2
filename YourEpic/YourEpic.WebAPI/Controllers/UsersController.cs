@@ -7,6 +7,9 @@ using YourEpic.Domain;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
 using YourEpic.WebAPI.Models;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace YourEpic.WebAPI.Controllers
 {
@@ -24,6 +27,17 @@ namespace YourEpic.WebAPI.Controllers
             _epicRepository = epicRepository;
         }
 
+
+        // GET: api/users/test
+        [HttpGet("test")]
+        [Authorize]
+        public IActionResult Test()
+        {
+            return new JsonResult(User, new JsonSerializerOptions(JsonSerializerDefaults.Web)
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
+        }
 
         // GET: api/users
         [HttpGet]
