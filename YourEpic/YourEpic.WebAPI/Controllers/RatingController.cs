@@ -37,15 +37,16 @@ namespace YourEpic.WebAPI.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Put(RatingModel rating)
+        public async Task<IActionResult> Put(int id, RatingModel rating)
         {
-            var domain_rating = Mappers.RatingModelMapper.Map(rating);
-            var pass = await Task.FromResult(_ratingRepository.UpdateRatingForEpic(domain_rating));
-            if (pass == true) 
+            if (await Task.FromResult(_ratingRepository.GetRatingByID(id)) is Rating domain_rating)
             {
-                return NoContent();
+                var pass = await Task.FromResult(_ratingRepository.UpdateRatingForEpic(Mappers.RatingModelMapper.Map(rating)));
+                if (pass == true)
+                {
+                    return NoContent();
+                }
             }
-
             return NotFound();
         }
 
@@ -53,12 +54,15 @@ namespace YourEpic.WebAPI.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Delete(RatingModel rating)
+        public async Task<IActionResult> Delete(int id, RatingModel rating)
         {
-            var pass = await Task.FromResult(_ratingRepository.RemoveRatingForEpic(Mappers.RatingModelMapper.Map(rating)));
-            if (pass == true) 
+            if(await Task.FromResult(_ratingRepository.GetRatingByID(id)) is Rating domain_rating)
             {
-                return NoContent();
+                var pass = await Task.FromResult(_ratingRepository.RemoveRatingForEpic(Mappers.RatingModelMapper.Map(rating)));
+                if (pass == true)
+                {
+                    return NoContent();
+                }
             }
             return NotFound();
         }

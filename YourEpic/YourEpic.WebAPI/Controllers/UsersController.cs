@@ -24,7 +24,6 @@ namespace YourEpic.WebAPI.Controllers
             _epicRepository = epicRepository;
         }
 
-
         // GET: api/users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserModel>>> Get()
@@ -36,7 +35,6 @@ namespace YourEpic.WebAPI.Controllers
             }
             return NotFound();
         }
-
 
         // POST: api/users
         [HttpPost]
@@ -50,7 +48,6 @@ namespace YourEpic.WebAPI.Controllers
             return BadRequest();
         }
 
-
         // GET: api/users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UserModel>> Get(int id)
@@ -63,7 +60,6 @@ namespace YourEpic.WebAPI.Controllers
 
             return NotFound();
         }
-
 
         // PUT: api/users/5
         [HttpPut("{id}")]
@@ -83,7 +79,6 @@ namespace YourEpic.WebAPI.Controllers
             return NotFound();
         }
 
-
         // DELETE: api/users/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
@@ -100,7 +95,6 @@ namespace YourEpic.WebAPI.Controllers
 
             return NotFound();
         }
-
 
         // Need to pass in the user id for the route, and the user to call the function
         // GET: api/users/{id}/epics
