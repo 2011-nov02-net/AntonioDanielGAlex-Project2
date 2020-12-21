@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
@@ -26,6 +27,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET: api/chapters/{id}
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<ChapterModel>> GetById([FromRoute] int id)
         {
             var m_chapter = await Task.FromResult(_chapterRepository.GetChapterByID(id));
@@ -41,6 +43,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // POST: api/chapters
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post(ChapterModel chapter)
         {
             var domain_chapter = Mappers.ChapterModelMapper.Map(chapter);
@@ -55,6 +58,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // PUT: api/chapters/{id}
         [HttpPut("{chapterID}")]
+        [Authorize]
         public async Task<IActionResult> Put([FromRoute] int chapterID, [FromBody] ChapterModel newChapter)
         {
             var domain_chapter = Mappers.ChapterModelMapper.Map(newChapter);
@@ -74,6 +78,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // DELETE: api/chapters/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             // Check 

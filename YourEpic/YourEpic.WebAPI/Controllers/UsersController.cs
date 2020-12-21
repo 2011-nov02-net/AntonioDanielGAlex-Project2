@@ -7,6 +7,9 @@ using YourEpic.Domain;
 using YourEpic.Domain.Interfaces;
 using YourEpic.Domain.Models;
 using YourEpic.WebAPI.Models;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace YourEpic.WebAPI.Controllers
 {
@@ -26,6 +29,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET: api/users
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<UserModel>>> Get()
         {
             var m_user = await Task.FromResult(_accountRepository.GetUsers());
@@ -38,6 +42,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // POST: api/users
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post(UserModel user)
         {
             var created = await Task.FromResult(_accountRepository.CreateAccount(Mappers.UserModelMapper.Map(user)));
@@ -50,6 +55,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET: api/users/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<UserModel>> Get(int id)
         {
             var d_user = await Task.FromResult(_accountRepository.GetUserByID(id));
@@ -63,6 +69,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // PUT: api/users/5
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> Put(int id, UserModel user)
         {
             if (_accountRepository.GetUserByID(user.ID) is User domain_user)
@@ -81,6 +88,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // DELETE: api/users/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             if (_accountRepository.GetUserByID(id) is User)
@@ -99,6 +107,7 @@ namespace YourEpic.WebAPI.Controllers
         // Need to pass in the user id for the route, and the user to call the function
         // GET: api/users/{id}/epics
         [HttpGet("{id}/epics")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<EpicModel>>> GetPublisherEpics(int id, UserModel user)
         {
             var d_epics = await Task.FromResult(_epicRepository.GetPublishersEpics(Mappers.UserModelMapper.Map(user)));

@@ -14,6 +14,7 @@ using YourEpic.DB;
 using YourEpic.DB.Repositories;
 using YourEpic.Domain;
 using YourEpic.Domain.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace YourEpic.WebAPI
 {
@@ -70,6 +71,12 @@ namespace YourEpic.WebAPI
             services.AddDbContext<YourEpicProjectTwoDatabaseContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("YourEpic")));
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.Authority = "https://dev-7824301.okta.com/oauth2/default";
+                options.Audience = "api://default";
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,6 +97,8 @@ namespace YourEpic.WebAPI
 
             app.UseCors();
 
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

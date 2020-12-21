@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using YourEpic.Domain.Interfaces;
@@ -25,6 +26,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET api/values/5
         [HttpGet("{epicID}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<CommentModel>>> Get([FromRoute] int epicID)
@@ -40,6 +42,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // POST api/comments
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Post(CommentModel comment)
@@ -58,6 +61,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // POST api/comments
         [HttpPost("comment/{commentID}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Post([FromRoute] int commentID, CommentModel comment)
@@ -77,6 +81,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // DELETE api/comments/5
         [HttpDelete("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> Delete([FromRoute] int id)
