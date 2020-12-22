@@ -68,6 +68,7 @@ namespace YourEpic.WebAPI.Controllers
         }
 
         [HttpGet("email/{email}")]
+        [Authorize]
         public async Task<ActionResult<UserModel>> GetUserByEmail(string email)
         {
             var d_user = await Task.FromResult(_accountRepository.GetUserByEmail(email));
