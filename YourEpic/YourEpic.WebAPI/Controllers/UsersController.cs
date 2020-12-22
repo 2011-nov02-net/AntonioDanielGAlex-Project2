@@ -10,6 +10,7 @@ using YourEpic.WebAPI.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace YourEpic.WebAPI.Controllers
 {
@@ -107,10 +108,12 @@ namespace YourEpic.WebAPI.Controllers
         // Need to pass in the user id for the route, and the user to call the function
         // GET: api/users/{id}/epics
         [HttpGet("{id}/epics")]
+        [ProducesResponseType(typeof(IEnumerable<EpicModel>), StatusCodes.Status200OK)]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<EpicModel>>> GetPublisherEpics(int id, UserModel user)
+        public async Task<ActionResult<IEnumerable<EpicModel>>> GetPublisherEpics(int id)
         {
-            var d_epics = await Task.FromResult(_epicRepository.GetPublishersEpics(Mappers.UserModelMapper.Map(user)));
+            var d_user = await Task.FromResult(_accountRepository.GetUserByID(id));
+            var d_epics = await Task.FromResult(_epicRepository.GetPublishersEpics(d_user));
             if (d_epics.Select(Mappers.EpicModelMapper.Map) is IEnumerable<EpicModel> epics)
             {
                 return Ok(epics);
