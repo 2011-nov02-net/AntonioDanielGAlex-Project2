@@ -174,5 +174,41 @@ namespace YourEpic.DB.Repositories
 
             return user;
         }
+
+        public Domain.Models.User GetUserByEmail(string email)
+        {
+            var dbUser = _context.Users
+                .Include(u => u.Epics)
+                .Include(u => u.RoleNavigation)
+                .FirstOrDefault(u => u.Email == email);
+
+            if (dbUser == null)
+            {
+                return null;
+            }
+
+            Domain.Models.User user = new Domain.Models.User
+            {
+                ID = dbUser.Id,
+                Name = dbUser.Name,
+                Email = dbUser.Email,
+                UserRole = new Domain.Models.Role
+                {
+                    ID = dbUser.RoleNavigation.Id,
+                    Name = dbUser.RoleNavigation.Name
+                },
+
+                //User epics will only have Id, Title, and Date set here.
+                //If we want more details, get info through Epics repository.
+                Epics = dbUser.Epics.Select(e => new Domain.Models.Epic
+                {
+                    ID = e.Id,
+                    Title = e.Name,
+                    Date = (DateTime)e.DateCreated
+                })
+            };
+
+            return user;
+        }
     }
 }

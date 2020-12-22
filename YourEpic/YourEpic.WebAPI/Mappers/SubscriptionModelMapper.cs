@@ -6,8 +6,8 @@ namespace YourEpic.WebAPI.Mappers
     {
         public static SubscriptionModel Map(Domain.Models.Subscription sub) {
             return new SubscriptionModel {
-                Publisher = new UserModel { ID = sub.Publisher.ID},
-                Subscriber = new UserModel { ID = sub.Subscriber.ID},
+                Publisher = new UserModel { ID = sub.Publisher.ID, Name = sub.Publisher.Name},
+                Subscriber = new UserModel { ID = sub.Subscriber.ID, Name = sub.Subscriber.Name},
                 HasNewContent = sub.HasNewContent
             };
         }
