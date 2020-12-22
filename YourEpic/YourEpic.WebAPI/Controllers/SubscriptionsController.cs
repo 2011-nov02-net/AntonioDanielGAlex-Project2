@@ -26,7 +26,7 @@ namespace YourEpic.WebAPI.Controllers
 
         // GET api/<SubscriptionsController>/5
         [HttpGet("{id}")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> Get(int id)
         {
             var result = await Task.FromResult(_subscriptionRepository.GetMySubscriptions(id));
