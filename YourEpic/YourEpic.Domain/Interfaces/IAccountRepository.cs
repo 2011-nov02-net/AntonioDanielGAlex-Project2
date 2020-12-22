@@ -15,5 +15,7 @@ namespace YourEpic.Domain.Interfaces
 
         User GetUserByID(int id);
 
+        User GetUserByEmail(string email);
+
     }
 }

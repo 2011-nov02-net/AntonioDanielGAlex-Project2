@@ -67,6 +67,24 @@ namespace YourEpic.WebAPI.Controllers
             return NotFound();
         }
 
+        [HttpGet("email/{email}")]
+        [Authorize]
+        public async Task<ActionResult<UserModel>> GetUserByEmail(string email)
+        {
+            var d_user = await Task.FromResult(_accountRepository.GetUserByEmail(email));
+
+            //had to add this because if email not found d_user is null and mapper throws exeption which causes server error (500)
+            if(d_user != null)
+            {
+                if (Mappers.UserModelMapper.Map(d_user) is UserModel user)
+                {
+                    return Ok(user);
+                }
+            }
+
+            return NotFound();
+        }
+
         // PUT: api/users/5
         [HttpPut("{id}")]
         [Authorize]
