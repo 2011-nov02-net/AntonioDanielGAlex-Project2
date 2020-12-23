@@ -91,9 +91,9 @@ namespace YourEpic.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> Put(int id, UserModel user)
         {
-            if (_accountRepository.GetUserByID(user.ID) is User domain_user)
+            if (_accountRepository.GetUserByID(user.ID) is User)
             {
-                var updated = await Task.FromResult(_accountRepository.EditAccount(domain_user));
+                var updated = await Task.FromResult(_accountRepository.EditAccount(Mappers.UserModelMapper.Map(user)));
                 if (updated)
                 {
 
