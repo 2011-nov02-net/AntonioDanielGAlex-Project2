@@ -23,7 +23,7 @@ namespace YourEpic.DB.Repositories
 
         public IEnumerable<Domain.Models.Epic> GetAllEpics(string title = null, string category = null)
         {
-            IQueryable<Epic> items = _context.Epics.Include(w => w.Writer)
+            IQueryable<Epic> items = _context.Epics.Include(w => w.Writer).ThenInclude(r=>r.RoleNavigation)
                    .Include(c => c.EpicCategories).ThenInclude(c => c.Category)
                    .Include(ch => ch.Chapters)
                    .Include(r => r.Ratings)
@@ -44,7 +44,7 @@ namespace YourEpic.DB.Repositories
 
         public Domain.Models.Epic GetEpicByID(int id)
         {
-            IQueryable<Epic> items = _context.Epics.Include(w => w.Writer)
+            IQueryable<Epic> items = _context.Epics.Include(w => w.Writer).ThenInclude(r => r.RoleNavigation)
                       .Include(c => c.EpicCategories).ThenInclude(c => c.Category)
                       .Include(ch => ch.Chapters)
                       .Include(r => r.Ratings)
@@ -55,7 +55,7 @@ namespace YourEpic.DB.Repositories
 
         public Domain.Models.Epic GetFeaturedEpic()
         {
-            IQueryable<Epic> items = _context.Epics.Include(w => w.Writer)
+            IQueryable<Epic> items = _context.Epics.Include(w => w.Writer).ThenInclude(r=>r.RoleNavigation)
                       .Include(c => c.EpicCategories).ThenInclude(c => c.Category)
                       .Include(ch => ch.Chapters)
                       .Include(r => r.Ratings)
@@ -70,7 +70,7 @@ namespace YourEpic.DB.Repositories
 
             int epicID = highestRatedEpic.ID;
 
-            IQueryable<Epic> items = _context.Epics.Include(w => w.Writer)
+            IQueryable<Epic> items = _context.Epics.Include(w => w.Writer).ThenInclude(r => r.RoleNavigation)
                       .Include(c => c.EpicCategories).ThenInclude(c => c.Category)
                       .Include(ch => ch.Chapters)
                       .Include(r => r.Ratings)
@@ -83,7 +83,7 @@ namespace YourEpic.DB.Repositories
 
         public IEnumerable<Domain.Models.Epic> GetPublishersEpics(Domain.Models.User user)
         {
-            return _context.Epics.Include(w => w.Writer)
+            return _context.Epics.Include(w => w.Writer).ThenInclude(r => r.RoleNavigation)
                       .Include(c => c.EpicCategories).ThenInclude(c => c.Category)
                       .Include(ch => ch.Chapters)
                       .Include(r => r.Ratings)
@@ -131,13 +131,13 @@ namespace YourEpic.DB.Repositories
 
         public IEnumerable<Domain.Models.Epic> GetEpicsSubscribedTo(int subscriberID)
         {
-            var subscriptions = _context.Subscriptions.Include(w => w.Writer).Include(s => s.Subscriber).Where(s => s.SubscriberId == subscriberID);
+            var subscriptions = _context.Subscriptions.Include(w => w.Writer).ThenInclude(r => r.RoleNavigation).Include(s => s.Subscriber).Where(s => s.SubscriberId == subscriberID);
 
             var m_subscriptions = subscriptions.Select(Mappers.SubscriptionMapper.Map);
 
             var m_ids = m_subscriptions.Select(s => s.Publisher.ID);
 
-            var db_epics = _context.Epics.Include(w => w.Writer)
+            var db_epics = _context.Epics.Include(w => w.Writer).ThenInclude(r => r.RoleNavigation)
                       .Include(c => c.EpicCategories).ThenInclude(c => c.Category)
                       .Include(ch => ch.Chapters)
                       .Include(r => r.Ratings)
