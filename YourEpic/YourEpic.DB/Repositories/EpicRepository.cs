@@ -88,7 +88,7 @@ namespace YourEpic.DB.Repositories
                       .Include(ch => ch.Chapters)
                       .Include(r => r.Ratings)
                       .Include(co => co.Comments)
-                      .Select(Mappers.EpicMapper.MapWithWriter)
+                      .Select(Mappers.EpicMapper.MapFull)
                       .Where(e => e.Writer.ID == user.ID);
         }
 

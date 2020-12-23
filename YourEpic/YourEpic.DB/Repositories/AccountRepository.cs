@@ -24,7 +24,7 @@ namespace YourEpic.DB.Repositories
         /// <returns>True if user succesfully added to database or false if customer already exists</returns>
         public bool CreateAccount(Domain.Models.User user)
         {
-            var dbUser = _context.Users
+            var dbUser = _context.Users.Include(r=>r.RoleNavigation)
                 .FirstOrDefault(u => u.Id == user.ID);
 
             if(dbUser != null)
@@ -32,7 +32,7 @@ namespace YourEpic.DB.Repositories
                 return false;
             }
 
-            _context.Users.Add(Mappers.UserMapper.Map(user));
+            _context.Users.Add(Mappers.UserMapper.MapBasic(user));
             _context.SaveChanges();
 
             return true;
@@ -45,7 +45,7 @@ namespace YourEpic.DB.Repositories
         /// <returns>True if deltetion was succesful or false if not customer was found to delete</returns>
         public bool DeleteAccount(int userID)
         {
-            var dbUser = _context.Users
+            var dbUser = _context.Users.Include(r => r.RoleNavigation)
                 .FirstOrDefault(u => u.Id == userID);
 
             if (dbUser == null)
@@ -66,7 +66,7 @@ namespace YourEpic.DB.Repositories
         /// <returns>True if edit was succesfull or false if not user was foundto edit</returns>
         public bool EditAccount(Domain.Models.User user)
         {
-            var dbUser = _context.Users
+            var dbUser = _context.Users.Include(r => r.RoleNavigation)
                 .FirstOrDefault(u => u.Id == user.ID);
 
             if (dbUser == null)
@@ -76,6 +76,7 @@ namespace YourEpic.DB.Repositories
 
             dbUser.Name = user.Name;
             dbUser.Email = user.Email;
+            dbUser.Role = user.UserRole.ID;
 
             _context.SaveChanges();
 
