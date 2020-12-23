@@ -18,7 +18,9 @@ namespace YourEpic.DB.Repositories
 
         public IEnumerable<Domain.Models.Subscription> GetMySubscriptions(int userID)
         {
-            return _context.Subscriptions.Include(s=>s.Subscriber).Include(w=>w.Writer).Select(Mappers.SubscriptionMapper.Map).Where(s => s.Subscriber.ID==userID);
+            return _context.Subscriptions
+                .Include(s=>s.Subscriber).ThenInclude(s => s.RoleNavigation)
+                .Include(w=>w.Writer).ThenInclude(r => r.RoleNavigation).Select(Mappers.SubscriptionMapper.Map).Where(s => s.Subscriber.ID==userID);
         }
 
         public bool SubscribeToPublisher(int subscriberID, int publisherID)
