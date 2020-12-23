@@ -62,7 +62,7 @@ namespace YourEpic.WebAPI.Controllers
         [Authorize]
         public async Task<IActionResult> AddEpic([FromBody] EpicModel epic)
         {
-            var domain_epic = Mappers.EpicModelMapper.Map(epic);
+            var domain_epic = Mappers.EpicModelMapper.MapAPItoDomain(epic);
 
             var completed = await Task.FromResult(_epicRepository.AddEpic(domain_epic));
 
