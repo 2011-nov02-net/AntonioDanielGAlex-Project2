@@ -31,6 +31,16 @@ namespace YourEpic.DB.Mappers
             };
         }
 
+        public static Epic MapDomainToDB(Domain.Models.Epic model)
+        {
+            return new Epic
+            {
+                Name = model.Title,
+                Concept = model.Concept,
+                WriterId = model.Writer.ID
+            };
+        }
+
         public static Domain.Models.Epic MapWithRatings(Epic entity)
         {
             return new Domain.Models.Epic

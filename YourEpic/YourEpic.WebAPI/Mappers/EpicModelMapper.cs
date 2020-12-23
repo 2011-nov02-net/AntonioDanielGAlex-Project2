@@ -25,11 +25,22 @@ namespace YourEpic.WebAPI.Mappers
             return new Domain.Models.Epic {
                 ID = model.ID,
                 Date = model.Date,
-                Title = model.Title, 
+                Title = model.Title,
                 Concept = model.Concept,
                 Writer = UserModelMapper.Map(model.Author),
                 Categories = model.Categories.Select(CategoryModelMapper.Map),
                 DateCompleted = model.DateCompleted ?? DateTime.MinValue
+            };
+        }
+
+        public static Domain.Models.Epic MapAPItoDomain(EpicModel model) {
+            Domain.Models.User author = new Domain.Models.User { ID = model.Author.ID};
+
+            return new Domain.Models.Epic
+            {
+                Title = model.Title,
+                Writer = author,
+                Concept = model.Concept
             };
         }
     }

@@ -107,7 +107,7 @@ namespace YourEpic.DB.Repositories
 
         public bool AddEpic(Domain.Models.Epic epic)
         {
-            var dbEpic = Mappers.EpicMapper.Map(epic);
+            var dbEpic = Mappers.EpicMapper.MapDomainToDB(epic);
             _context.Epics.Add(dbEpic);
             _context.SaveChanges();
 
