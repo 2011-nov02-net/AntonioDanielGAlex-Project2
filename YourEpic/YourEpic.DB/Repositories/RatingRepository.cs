@@ -39,15 +39,18 @@ namespace YourEpic.DB.Repositories
 
         public bool AddRatingForEpic(Domain.Models.Rating rating)
         {
-            try
+            Rating r = new Rating();
+            try { 
+                 r = _context.Ratings.First(r => r.EpicId == rating.RatingEpic.ID && r.RaterId == rating.Rater.ID);
+            }
+            catch
             {
-                var db_rating = Mappers.RatingMapper.MapFull(rating);
-
-                _context.Add(db_rating);
+                var newModel = Mappers.RatingMapper.MapFull(rating);
+                _context.Add(newModel);
                 _context.SaveChanges();
                 return true;
             }
-            catch { return false; }
+                return false;
         }
 
         public bool RemoveRatingForEpic(Domain.Models.Rating rating)
