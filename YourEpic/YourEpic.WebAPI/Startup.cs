@@ -61,7 +61,8 @@ namespace YourEpic.WebAPI
                     builder =>
                     {
                         builder.WithOrigins("http://localhost:4200",
-                                            "https://yourepic-api.azurewebsites.net")
+                                            "https://yourepic-api.azurewebsites.net",
+                                            "https://yourepic.azurewebsites.net")
                             .AllowAnyMethod() // allow PUT & DELETE not just GET & POST
                             .AllowAnyHeader()
                             .AllowCredentials();

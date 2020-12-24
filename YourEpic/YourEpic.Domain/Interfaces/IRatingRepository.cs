@@ -10,6 +10,6 @@ namespace YourEpic.Domain.Interfaces
         bool AddRatingForEpic(Models.Rating rating);
         bool RemoveRatingForEpic(Models.Rating rating);
         bool UpdateRatingForEpic(Models.Rating rating);
-        Rating GetRatingByID(int ratingID);
+        IEnumerable<Rating> GetMyRatings(int userId);
     }
 }
