@@ -22,13 +22,16 @@ namespace YourEpic.DB.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public Domain.Models.Rating GetRatingByID(int ratingID) {
-            Domain.Models.Rating nonDB_rating;
-            try {
-                var db_rating = _context.Ratings.Include(w=>w.Rater).Include(e=>e.Epic).First(r=>r.Id == ratingID);
-                nonDB_rating = Mappers.RatingMapper.MapFull(db_rating);
+        public IEnumerable<Domain.Models.Rating> GetMyRatings(int userId)
+        {
+            IEnumerable<Domain.Models.Rating> nonDB_rating;
+            try
+            {
+                var db_rating = _context.Ratings.Include(w => w.Rater).Include(e => e.Epic);
+                nonDB_rating = db_rating.Select(Mappers.RatingMapper.MapFull);
             }
-            catch {
+            catch
+            {
                 return null;
             }
             return nonDB_rating;
@@ -61,11 +64,13 @@ namespace YourEpic.DB.Repositories
 
         public bool UpdateRatingForEpic(Domain.Models.Rating rating)
         {
-            try { 
-                Rating currentEntity = _context.Ratings.Find(rating.ID);
-                Rating newEntity = Mappers.RatingMapper.MapFull(rating);
+            try
+            {
+                var db_rating = _context.Ratings.First(r => r.EpicId == rating.RatingEpic.ID && r.RaterId == rating.Rater.ID);
 
-                _context.Entry(currentEntity).CurrentValues.SetValues(newEntity);
+                db_rating.Rating1 = rating.RatingNumber;
+
+                _context.SaveChanges();
 
                 return true;
             }
