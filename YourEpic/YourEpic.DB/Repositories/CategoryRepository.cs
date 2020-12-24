@@ -30,12 +30,9 @@ namespace YourEpic.DB.Repositories
             {
                 foreach (var category in categoriesToAdd)
                 {
-                    foreach (var exists in dbEpicCatergory.Where(e=>e.EpicId == epicID))
+                    if (dbEpicCatergory.Find(epicID, category.ID) != null)
                     {
-                        if (category.ID == exists.CategoryId)
-                        {
-                            categoriesToAdd.ToList().Remove(category);
-                        }
+                        categoriesToAdd = categoriesToAdd.Where(c => c.ID != category.ID).ToList();
                     }
                 }
             }

@@ -29,5 +29,15 @@ namespace YourEpic.DB.Mappers
                 EpicId = model.EpicID
             };
         }
+
+        public static Chapter MapDomainToDB(Domain.Models.Chapter model)
+        {
+            return new Chapter
+            {
+                Title = model.Title,
+                Text = model.Text,
+                EpicId = model.EpicID
+            };
+        }
     }
 }

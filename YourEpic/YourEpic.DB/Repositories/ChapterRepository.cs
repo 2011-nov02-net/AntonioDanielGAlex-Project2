@@ -29,14 +29,7 @@ namespace YourEpic.DB.Repositories
                 return false;
             }
 
-            var dbChapter = new Chapter
-            {
-                Id = chapter.ID,
-                Title = chapter.Title,
-                EpicId = chapter.EpicID,
-                DateCreated = chapter.Date,
-                Text = chapter.Text
-            };
+            var dbChapter = Mappers.ChapterMapper.MapDomainToDB(chapter);
 
             _context.Chapters.Add(dbChapter);
             _context.SaveChanges();

@@ -62,7 +62,7 @@ namespace YourEpic.WebAPI.Controllers
         public async Task<IActionResult> Put([FromRoute] int chapterID, [FromBody] ChapterModel newChapter)
         {
             var domain_chapter = Mappers.ChapterModelMapper.Map(newChapter);
-            if (_chapterRepository.GetChaptersByEpicID(chapterID) is Chapter)
+            if (_chapterRepository.GetChaptersByEpicID(newChapter.EpicID) is IEnumerable<Chapter>)
             {
                 var completed = await Task.FromResult(_chapterRepository.UpdateChapter(domain_chapter));
                 if (completed)
