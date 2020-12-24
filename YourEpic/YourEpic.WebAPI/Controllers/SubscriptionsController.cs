@@ -37,11 +37,11 @@ namespace YourEpic.WebAPI.Controllers
             return NotFound();
         }
 
-        [HttpPost("{publisherID}/subscribee/{subscriber}")]
+        [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Post(int subscriber, int publisherID)
+        public async Task<IActionResult> Post(SubscriptionModel subscription)
         {
-            var created = await Task.FromResult(_subscriptionRepository.SubscribeToPublisher(subscriber, publisherID));
+            var created = await Task.FromResult(_subscriptionRepository.SubscribeToPublisher(subscription.Subscriber.ID, subscription.Publisher.ID));
             if (created)
             {
                 return Ok();

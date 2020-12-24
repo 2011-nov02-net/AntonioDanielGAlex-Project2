@@ -38,7 +38,9 @@ namespace YourEpic.DB.Repositories
         {
             var deleteSubscription = _context.Subscriptions.Find(publisherID, subscriberID);
 
-            _context.Subscriptions.Remove(deleteSubscription);
+            _context.Remove(deleteSubscription);
+
+            _context.SaveChanges();
 
             return true;
         }
