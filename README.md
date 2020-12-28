@@ -3,7 +3,7 @@
 This is the REST API portion the Angular Application can be found: 
 https://github.com/2011-nov02-net/yourepic-project2
 
-YourEpic Repository for Antonio, Daniel G and Alex.
+YourEpic Repository for Antonio, Daniel G, and Alex.
 
 [YourEpic Proposal](https://docs.google.com/document/d/110CFgocDz_p0YhPzczBU7uMoHWYTG94biJe4v2cDekM/edit#heading=h.c1t6sybq75mr)
 
@@ -46,8 +46,8 @@ Definitions\
 	Chapter - A single entity that contains a title and content
 
 ### To - Do
-* We want users to be able to comment on Epics to start a discussio.
-* Give more control to epics to the publishers, allowing for deletion.
+* We want users to be able to comment on Epics to start a discussion.
+* Give more control of epics to the publishers, allowing for deletion.
 * Publishers should have the ability to make Epics Private or Public.
 
 ## Getting Started
@@ -60,8 +60,7 @@ To run this backend server all you need to do is run with
 
 ## Usage
 To interact directly with the API you can create request with your favorite HTTP Request maker or on the browser.
-S
-I highly recommend you visit the other github repo and learn to run them both simultaneously.
+If you want to use this along with the Angular web application, I highly recommend you visit the other github repo and learn to run them both simultaneously.
 
 ## License
 YourEpic uses the MIT License Format 
